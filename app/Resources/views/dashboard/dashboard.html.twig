@@ -1,0 +1,333 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    PROCOST - Projects costs calculation with Symfony
+{% endblock %}
+
+{% block dashboard %}
+    <li class="mt">
+        <a class="active" href="index.html">
+            <i class="fa fa-dashboard"></i>
+            <span>Tableau de bord</span>
+        </a>
+    </li>
+{% endblock %}
+
+{% block body %}
+    <section class="wrapper">
+
+        <div class="row">
+            <div class="col-lg-9 main-chart">
+
+                <div class="row mtbox">
+                    <div class="col-md-2 col-sm-2 col-md-offset-2 box0">
+                        <div class="box1">
+                            <span class="li_stack"></span>
+                            <h3>93</h3>
+                        </div>
+                        <p>93 projets en réalisation</p>
+                    </div>
+                    <div class="col-md-2 col-sm-2 box0">
+                        <div class="box1">
+                            <span class="li_cloud"></span>
+                            <h3>48</h3>
+                        </div>
+                        <p>48 projets livrés</p>
+                    </div>
+                    <div class="col-md-2 col-sm-2 box0">
+                        <div class="box1">
+                            <span class="li_user"></span>
+                            <h3>19</h3>
+                        </div>
+                        <p>19 employés enregistrés</p>
+                    </div>
+                    <div class="col-md-2 col-sm-2 box0">
+                        <div class="box1">
+                            <span class="li_heart"></span>
+                            <h3>267</h3>
+                        </div>
+                        <p>267 jours de production</p>
+                    </div>
+                </div>
+                <!-- /row mt -->
+
+                <div class="row mt">
+                    <div class="col-md-4 col-sm-4 mb">
+                        <div class="white-panel pn donut-chart">
+                            <div class="white-header">
+                                <h5>RENTABILITE</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 col-xs-6 goleft">
+                                    <p>
+                                        <i class="fa fa-database"></i> 70% CAPEX</p>
+                                </div>
+                            </div>
+                            <canvas id="ratio" height="120" width="120"></canvas>
+                            <script>
+                                var doughnutData = [{ value: 70, color: "#68dff0" }, { value: 30, color: "#fdfdfd" }];
+                                var myDoughnut = new Chart(document.getElementById("ratio").getContext("2d")).Doughnut(doughnutData);
+                            </script>
+                        </div>
+                        <!--/grey-panel -->
+                    </div>
+
+                    <div class="col-md-4 col-sm-4 mb">
+                        <div class="white-panel pn donut-chart">
+                            <div class="white-header">
+                                <h5>TAUX DE LIVRAISON</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 col-xs-6 goleft">
+                                    <p>
+                                        <i class="fa fa-cloud"></i> 35% LIVRES</p>
+                                </div>
+                            </div>
+                            <canvas id="ratio2" height="120" width="120"></canvas>
+                            <script>
+                                var doughnutData = [{ value: 35, color: "#68dff0" }, { value: 65, color: "#fdfdfd" }];
+                                var myDoughnut = new Chart(document.getElementById("ratio2").getContext("2d")).Doughnut(doughnutData);
+                            </script>
+                        </div>
+                        <!--/grey-panel -->
+                    </div>
+
+                    <div class="col-md-4 mb">
+                        <!-- WHITE PANEL - TOP USER -->
+                        <div class="white-panel pn">
+                            <div class="white-header">
+                                <h5>TOP EMPLOYE</h5>
+                            </div>
+                            <p>
+                                <img src="assets/img/ui-zac.jpg" class="img-circle" width="80">
+                            </p>
+                            <p>
+                                <b>Zac Producteur</b>
+                            </p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="small mt">EMPLOYE DEPUIS</p>
+                                    <p>2012</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="small mt">TOTAL DEPENSE</p>
+                                    <p>34 567 €</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /col-md-4 -->
+
+                </div>
+                <!-- /row -->
+
+                <div class="row">
+                    <div class="col-lg-12 main-chart">
+                        <table class="table table-bordered table-striped table-condensed">
+                            <thead>
+                            <tr>
+                                <th>Projet</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Coût</th>
+                                <th>Livré ?</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <a href="#">Mon projet</a>
+                                </th>
+                                <th>CAPEX</th>
+                                <th>18/03/2018</th>
+                                <th>3 200 €</th>
+                                <th>
+                                    <span class="label label-success label-mini">OUI</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <a href="#">Mon projet</a>
+                                </th>
+                                <th>CAPEX</th>
+                                <th>18/03/2018</th>
+                                <th>3 200 €</th>
+                                <th>
+                                    <span class="label label-success label-mini">OUI</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <a href="#">Mon projet</a>
+                                </th>
+                                <th>CAPEX</th>
+                                <th>18/03/2018</th>
+                                <th>3 200 €</th>
+                                <th>
+                                    <span class="label label-success label-mini">OUI</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <a href="#">Mon projet</a>
+                                </th>
+                                <th>CAPEX</th>
+                                <th>18/03/2018</th>
+                                <th>3 200 €</th>
+                                <th>
+                                    <span class="label label-success label-mini">OUI</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <a href="#">Mon projet</a>
+                                </th>
+                                <th>OPEX</th>
+                                <th>18/03/2018</th>
+                                <th>3 200 €</th>
+                                <th>
+                                    <span class="label label-danger label-mini">NON</span>
+                                </th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /col-lg-9 END SECTION MIDDLE -->
+
+            <!-- ***********************************************************************************************************************************************
+            RIGHT SIDEBAR CONTENT
+            ************************************************************************************************************************************************ -->
+
+            <div class="col-lg-3 ds">
+                <h3>TEMPS DE PRODUCTION</h3>
+
+                <div class="desc">
+                    <div class="thumb">
+                        <span class="badge bg-theme">
+                            <i class="fa fa-clock-o"></i>
+                        </span>
+                    </div>
+                    <div class="details">
+                        <p>
+                            <a href="#">James Brown</a> a travaillé sur
+                            <a href="#">Nom du projet</a>.
+                            <br/>
+                            <muted>3 JOURS</muted>
+                        </p>
+                    </div>
+                </div>
+                <div class="desc">
+                    <div class="thumb">
+                        <span class="badge bg-theme">
+                            <i class="fa fa-clock-o"></i>
+                        </span>
+                    </div>
+                    <div class="details">
+                        <p>
+                            <a href="#">James Brown</a> a travaillé sur
+                            <a href="#">Nom du projet</a>.
+                            <br/>
+                            <muted>3 JOURS</muted>
+                        </p>
+                    </div>
+                </div>
+                <div class="desc">
+                    <div class="thumb">
+                        <span class="badge bg-theme">
+                            <i class="fa fa-clock-o"></i>
+                        </span>
+                    </div>
+                    <div class="details">
+                        <p>
+                            <a href="#">James Brown</a> a travaillé sur
+                            <a href="#">Nom du projet</a>.
+                            <br/>
+                            <muted>3 JOURS</muted>
+                        </p>
+                    </div>
+                </div>
+                <div class="desc">
+                    <div class="thumb">
+                        <span class="badge bg-theme">
+                            <i class="fa fa-clock-o"></i>
+                        </span>
+                    </div>
+                    <div class="details">
+                        <p>
+                            <a href="#">James Brown</a> a travaillé sur
+                            <a href="#">Nom du projet</a>.
+                            <br/>
+                            <muted>3 JOURS</muted>
+                        </p>
+                    </div>
+                </div>
+                <div class="desc">
+                    <div class="thumb">
+                        <span class="badge bg-theme">
+                            <i class="fa fa-clock-o"></i>
+                        </span>
+                    </div>
+                    <div class="details">
+                        <p>
+                            <a href="#">James Brown</a> a travaillé sur
+                            <a href="#">Nom du projet</a>.
+                            <br/>
+                            <muted>3 JOURS</muted>
+                        </p>
+                    </div>
+                </div>
+                <div class="desc">
+                    <div class="thumb">
+                        <span class="badge bg-theme">
+                            <i class="fa fa-clock-o"></i>
+                        </span>
+                    </div>
+                    <div class="details">
+                        <p>
+                            <a href="#">James Brown</a> a travaillé sur
+                            <a href="#">Nom du projet</a>.
+                            <br/>
+                            <muted>3 JOURS</muted>
+                        </p>
+                    </div>
+                </div>
+                <div class="desc">
+                    <div class="thumb">
+                        <span class="badge bg-theme">
+                            <i class="fa fa-clock-o"></i>
+                        </span>
+                    </div>
+                    <div class="details">
+                        <p>
+                            <a href="#">James Brown</a> a travaillé sur
+                            <a href="#">Nom du projet</a>.
+                            <br/>
+                            <muted>3 JOURS</muted>
+                        </p>
+                    </div>
+                </div>
+                <div class="desc">
+                    <div class="thumb">
+                        <span class="badge bg-theme">
+                            <i class="fa fa-clock-o"></i>
+                        </span>
+                    </div>
+                    <div class="details">
+                        <p>
+                            <a href="#">James Brown</a> a travaillé sur
+                            <a href="#">Nom du projet</a>.
+                            <br/>
+                            <muted>3 JOURS</muted>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /col-lg-3 -->
+        </div>
+        <!--/row -->
+    </section>
+{% endblock %}
