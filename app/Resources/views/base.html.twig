@@ -43,7 +43,7 @@
                     <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
                 </div>
                 <!--logo start-->
-                <a href="index.html" class="logo">
+                <a href="{{ path('dashboard') }}" class="logo">
                     <b>PROCOST</b>
                 </a>
                 <!--logo end-->
@@ -76,7 +76,7 @@
 
                         {% block dashboard %}
                             <li class="mt">
-                                <a href="index.html">
+                                <a href="{{ path('dashboard') }}">
                                     <i class="fa fa-dashboard"></i>
                                     <span>Tableau de bord</span>
                                 </a>
@@ -85,7 +85,7 @@
 
                         {% block project %}
                             <li class="sub-menu">
-                                <a href="#">
+                                <a href="{{ path('project') }}">
                                     <i class="fa fa-desktop"></i>
                                     <span>Les projets</span>
                                 </a>
@@ -94,7 +94,7 @@
 
                         {% block employee %}
                             <li class="sub-menu">
-                                <a href="#">
+                                <a href="{{ path('employee') }}">
                                     <i class="fa fa-users"></i>
                                     <span>Les employés</span>
                                 </a>
@@ -103,7 +103,7 @@
 
                         {% block job %}
                             <li class="sub-menu">
-                                <a href="#">
+                                <a href="{{ path('job') }}">
                                     <i class="fa fa-book"></i>
                                     <span>Les métiers</span>
                                 </a>
@@ -128,7 +128,7 @@
             <footer class="site-footer">
                 <div class="text-center">
                     2018 - Symfony PROCOST
-                    <a href="index.html#" class="go-top">
+                    <a href="{{ path('dashboard') }}" class="go-top">
                         <i class="fa fa-angle-up"></i>
                     </a>
                 </div>

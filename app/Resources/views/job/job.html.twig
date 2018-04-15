@@ -6,7 +6,7 @@
 
 {% block job %}
     <li class="sub-menu">
-        <a class="active" href="#">
+        <a class="active" href="{{ path('job') }}">
             <i class="fa fa-book"></i>
             <span>Les métiers</span>
         </a>
@@ -17,7 +17,8 @@
     <section class="wrapper">
 
         <h3><i class="fa fa-angle-right"></i> Gestion des métiers</h3>
-        <a class="btn btn-success btn-sm pull-right" href="#">Ajouter un métier</a>
+        <a class="btn btn-success btn-sm pull-right" href="{{ path('job_edit') }}">Ajouter un métier</a>
+
 
         <div class="row">
             <div class="col-lg-6 col-lg-offset-3 main-chart">
@@ -28,35 +29,28 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
+
                     <tbody>
-                        <tr>
-                            <th>Web designer</th>
-                            <th>
-                                <a href="#" class="btn btn-success btn-xs">
-                                    <i class="fa fa-clock-o"></i>
-                                </a>
-                                <a href="#" class="btn btn-primary btn-xs">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <a href="#" class="btn btn-danger btn-xs">
-                                    <i class="fa fa-trash-o"></i>
-                                </a>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>Développeur</th>
-                            <th>
-                                <a href="#" class="btn btn-success btn-xs">
-                                    <i class="fa fa-clock-o"></i>
-                                </a>
-                                <a href="#" class="btn btn-primary btn-xs">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <a href="#" class="btn btn-danger btn-xs">
-                                    <i class="fa fa-trash-o"></i>
-                                </a>
-                            </th>
-                        </tr>
+
+                        {% if jobs is defined %}
+                            {% for job in jobs %}
+                                <tr>
+                                    <th>{{ job.name }}</th>
+                                    <th>
+                                        <a href="#" class="btn btn-success btn-xs">
+                                            <i class="fa fa-clock-o"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-primary btn-xs">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-danger btn-xs">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    </th>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+
                     </tbody>
                 </table>
             </div>
