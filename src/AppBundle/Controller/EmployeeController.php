@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Franck
- * Date: 15/04/2018
- * Time: 17:16
- */
 
 namespace AppBundle\Controller;
 
@@ -20,8 +14,12 @@ class EmployeeController extends Controller
      */
     public function employeeAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('employee/employee.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        $employees = $em->getRepository('AppBundle:Employee')->findAll();
+
+        return $this->render('employee/employee.html.twig', array(
+                "employees" => $employees)
+        );
     }
 
     /**

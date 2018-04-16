@@ -33,42 +33,28 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th>Projet 1</th>
-                        <th>description</th>
-                        <th>OPEX</th>
-                        <th>01/01/2008</th>
-                        <th>oui</th>
-                        <th>
-                            <a href="#" class="btn btn-success btn-xs">
-                                <i class="fa fa-clock-o"></i>
-                            </a>
-                            <a href="#" class="btn btn-primary btn-xs">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                            <a href="#" class="btn btn-danger btn-xs">
-                                <i class="fa fa-trash-o"></i>
-                            </a>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>Projet 2</th>
-                        <th>description</th>
-                        <th>OPEX</th>
-                        <th>01/01/2009</th>
-                        <th>oui</th>
-                        <th>
-                            <a href="#" class="btn btn-success btn-xs">
-                                <i class="fa fa-clock-o"></i>
-                            </a>
-                            <a href="#" class="btn btn-primary btn-xs">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                            <a href="#" class="btn btn-danger btn-xs">
-                                <i class="fa fa-trash-o"></i>
-                            </a>
-                        </th>
-                    </tr>
+                    {% if projects is defined %}
+                        {% for project in projects %}
+                            <tr>
+                                <th>{{ project.name }}</th>
+                                <th>{{ project.description }}</th>
+                                <th>{{ project.type }}</th>
+                                <th>{{ project.date |date('d/m/Y') }}</th>
+                                <th>{{ project.send }}</th>
+                                <th>
+                                    <a href="#" class="btn btn-success btn-xs">
+                                        <i class="fa fa-clock-o"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-primary btn-xs">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-danger btn-xs">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                </th>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                     </tbody>
                 </table>
             </div>

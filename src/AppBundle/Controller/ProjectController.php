@@ -19,8 +19,12 @@ class ProjectController extends Controller
      */
     public function projectAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('project/project.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        $projects = $em->getRepository('AppBundle:Project')->findAll();
+
+        return $this->render('project/project.html.twig', array(
+                "projects" => $projects)
+        );
     }
 
     /**

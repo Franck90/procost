@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Job;
+use AppBundle\Form\JobType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +29,36 @@ class JobController extends Controller
      */
     public function jobEditAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('job/job_edit.html.twig');
+
+
+        $job = new Job();
+        $form = $this->createForm(JobType::class, $job);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($job);
+            $em->flush();
+
+            return $this->redirectToRoute('job');
+        }
+
+        /*if ($form->isValid()) {
+
+
+            $job = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($job);
+            $em->flush();
+
+            return $this->redirectToRoute('job');
+
+        }*/
+
+        return $this->render('job/job_edit.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
 }
