@@ -8,6 +8,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Project;
+use AppBundle\Form\ProjectType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,11 +30,69 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project/edit/", name="project_edit")
+     * @Route("/project/new/", name="project_new")
      */
-    public function projectEditAction(Request $request)
+    public function projectNewAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('project/project_edit.html.twig');
+        $project = new Project();
+        $form = $this->createForm(ProjectType::class, $project);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($project);
+            $em->flush();
+
+            return $this->redirectToRoute('project');
+        }
+
+        return $this->render('project/project_new.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/project/edit/{id}/", name="project_edit", requirements = {"id"="\d+"})
+     */
+    public function projectEditAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $projectToUpdate = $this->getDoctrine()->getRepository('AppBundle:Project')->findOneById($id);
+
+        $form = $this->createForm(ProjectType::class, $projectToUpdate);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($projectToUpdate);
+            $em->flush();
+
+            return $this->redirectToRoute('project');
+        }
+
+        return $this->render('project/project_edit.html.twig', array(
+            'form' => $form->createView(),
+            'id' => $id
+        ));
+    }
+
+    /**
+     * @Route("/project/delete/{id}", name="project_delete", requirements = {"id"="\d+"})
+     */
+    public function projectDeleteAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $projectToDelete = $this->getDoctrine()->getRepository('AppBundle:Project')->findOneById($id);
+
+        $em->remove($projectToDelete);
+        $em->flush();
+
+        return $this->redirectToRoute('project');
     }
 }

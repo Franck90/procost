@@ -61,6 +61,11 @@ class Project
      */
     private $employee;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Detail", mappedBy="project")
+     */
+    private $detail;
+
 
     /**
      * Get id
@@ -197,6 +202,7 @@ class Project
     public function __construct()
     {
         $this->employee = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->detail  = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -231,5 +237,39 @@ class Project
     public function getEmployee()
     {
         return $this->employee;
+    }
+
+    /**
+     * Add detail
+     *
+     * @param \AppBundle\Entity\Detail $detail
+     *
+     * @return Project
+     */
+    public function addDetail(\AppBundle\Entity\Detail $detail)
+    {
+        $this->detail[] = $detail;
+
+        return $this;
+    }
+
+    /**
+     * Remove detail
+     *
+     * @param \AppBundle\Entity\Detail $detail
+     */
+    public function removeDetail(\AppBundle\Entity\Detail $detail)
+    {
+        $this->detail->removeElement($detail);
+    }
+
+    /**
+     * Get detail
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDetail()
+    {
+        return $this->detail;
     }
 }

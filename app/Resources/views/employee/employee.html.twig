@@ -42,7 +42,7 @@
                                     <th>{{ employee.cost }}</th>
                                     <th>{{ employee.date |date('d/m/Y') }}</th>
                                     <th>
-                                        <a href="#" class="btn btn-success btn-xs">
+                                        <a href="{{ path('employee_detail', {'id' : employee.id}) }}" class="btn btn-success btn-xs">
                                             <i class="fa fa-clock-o"></i>
                                         </a>
                                         <a href="{{ path('employee_edit', {'id' : employee.id}) }}" class="btn btn-primary btn-xs">

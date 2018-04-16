@@ -17,7 +17,7 @@ class ProjectType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('name', TextType::class, array('label' => 'Nom'));
-        $builder->add('description', EmailType::class, array('label' => 'Description'));
+        $builder->add('description', TextType::class, array('label' => 'Description'));
         $builder->add('type', ChoiceType::class, array(
             'choices'  => array(
                 'CAPEX' => 'CAPEX',
@@ -30,8 +30,8 @@ class ProjectType extends AbstractType
         ));
         $builder->add('send', ChoiceType::class, array(
             'choices'  => array(
-                'Oui' => true,
-                'Non' => false,
+                'Oui' => 'oui',
+                'Non' => 'non',
             ),
         ));
         $builder->add('save', SubmitType::class, array('label' => 'Enregistrer'));

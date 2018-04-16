@@ -61,6 +61,11 @@ class Project
      */
     private $employee;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Detail", mappedBy="project")
+     */
+    private $detail;
+
 
     /**
      * Get id
@@ -197,6 +202,7 @@ class Project
     public function __construct()
     {
         $this->employee = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->detail  = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

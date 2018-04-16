@@ -2,7 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Detail;
 use AppBundle\Entity\Employee;
+use AppBundle\Form\DetailType;
 use AppBundle\Form\EmployeeType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -89,5 +91,71 @@ class EmployeeController extends Controller
         $em->flush();
 
         return $this->redirectToRoute('employee');
+    }
+
+    /**
+     * @Route("employee/detail/{id}", name="employee_detail", requirements= {"id"="\d+"})
+     */
+    public function employeeDetailAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $employee = $em->getRepository('AppBundle:Employee')->find($id);
+
+        $detailList = $this->get('knp_paginator')->paginate(
+
+            $em->getRepository('AppBundle:Detail')->findBy(array('employee' => $employee->getId()), array('date' => 'desc')),
+                $request->query->get('page', 1),
+                10
+        );
+
+        $detail = new Detail();
+        $detail->setEmployee($employee);
+
+        $form = $this->createForm(DetailType::class, $detail);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $em->persist($detail);
+            $em->flush();
+
+            return $this->redirectToRoute("employee_detail", array(
+                'id' => $id
+            ));
+        }
+
+        return $this->render('employee/employee_detail.html.twig', array(
+            'employee' => $employee,
+            'detailList' => $detailList,
+            'form' => $form->createView()
+        ));
+
+        /*$em = $this->getDoctrine()->getManager();
+        $employee = $this->getDoctrine()->getRepository('AppBundle:Employee')->findOneById($id);
+
+        $detail = $this->getDoctrine()->getRepository('AppBundle:Detail')->findBy(array(
+            'employee_id' => $id));
+
+
+        $form = $this->createForm(DetailType::class, $detail);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $newDetail = new Detail();
+            $newDetail->setEmployee($employee);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newDetail);
+            $em->flush();
+
+            return $this->redirectToRoute('employee_detail', array('id' => $id));
+        }
+
+        return $this->render('employee/employee_detail.html.twig', array(
+                "employee" => $employee,
+                "detail" => $detail,
+                'form' => $form->createView()
+        ));*/
+
     }
 }

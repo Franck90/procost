@@ -21,6 +21,7 @@ class EmployeeType extends AbstractType
         $builder->add('name', TextType::class, array('label' => 'Prénom'));
         $builder->add('mail', EmailType::class, array('label' => 'Email'));
         $builder->add('job', EntityType::class, array(
+            'label' => 'Métier',
             'mapped' => true,
             'class' => Job::class,
             'choice_label' => function($job){
