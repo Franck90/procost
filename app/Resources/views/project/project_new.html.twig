@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    PROCOST - Edition d'un métier
+    PROCOST - Ajout d'un projet
 {% endblock %}
 
-{% block job %}
+{% block project %}
     <li class="sub-menu">
-        <a class="active" href="{{ path('job') }}">
-            <i class="fa fa-book"></i>
-            <span>Les métiers</span>
+        <a class="active" href="{{ path('project') }}">
+            <i class="fa fa-desktop"></i>
+            <span>Les projets</span>
         </a>
     </li>
 {% endblock %}
@@ -16,12 +16,11 @@
 {% block body %}
     <section class="wrapper">
 
-        <h3><i class="fa fa-angle-right"></i> Edition d'un métier</h3>
+        <h3><i class="fa fa-angle-right"></i> Ajout d'un projet</h3>
 
         <div class="form-panel">
             {{ form(form) }}
         </div>
 
-        <!--/row -->
     </section>
 {% endblock %}
