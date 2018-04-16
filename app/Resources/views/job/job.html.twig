@@ -17,7 +17,7 @@
     <section class="wrapper">
 
         <h3><i class="fa fa-angle-right"></i> Gestion des métiers</h3>
-        <a class="btn btn-success btn-sm pull-right" href="{{ path('job_edit') }}">Ajouter un métier</a>
+        <a class="btn btn-success btn-sm pull-right" href="{{ path('job_new') }}">Ajouter un métier</a>
 
 
         <div class="row">
@@ -37,13 +37,10 @@
                                 <tr>
                                     <th>{{ job.name }}</th>
                                     <th>
-                                        <a href="#" class="btn btn-success btn-xs">
-                                            <i class="fa fa-clock-o"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-primary btn-xs">
+                                        <a href="{{ path('job_edit', {'id' : job.id}) }}" class="btn btn-primary btn-xs">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a href="#" class="btn btn-danger btn-xs">
+                                        <a href="{{ path('job_delete', {'id' : job.id}) }}" class="btn btn-danger btn-xs">
                                             <i class="fa fa-trash-o"></i>
                                         </a>
                                     </th>

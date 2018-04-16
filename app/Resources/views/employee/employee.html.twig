@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    PROCOST - Employee
+    PROCOST - Employés
 {% endblock %}
 
 {% block employee %}
@@ -17,7 +17,7 @@
     <section class="wrapper">
 
         <h3><i class="fa fa-angle-right"></i> Gestion des employés</h3>
-        <a class="btn btn-success btn-sm pull-right" href="#">Ajouter un employé</a>
+        <a class="btn btn-success btn-sm pull-right" href="{{ path('employee_new') }}">Ajouter un employé</a>
 
         <div class="row">
             <div class="col-lg-12 main-chart">
@@ -45,10 +45,10 @@
                                         <a href="#" class="btn btn-success btn-xs">
                                             <i class="fa fa-clock-o"></i>
                                         </a>
-                                        <a href="#" class="btn btn-primary btn-xs">
+                                        <a href="{{ path('employee_edit', {'id' : employee.id}) }}" class="btn btn-primary btn-xs">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a href="#" class="btn btn-danger btn-xs">
+                                        <a href="{{ path('employee_delete', {'id' : employee.id}) }}" class="btn btn-danger btn-xs">
                                             <i class="fa fa-trash-o"></i>
                                         </a>
                                     </th>
