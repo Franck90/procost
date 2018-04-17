@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\Detail;
 use AppBundle\Entity\Employee;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,6 +21,10 @@ class DetailProjectType extends AbstractType
             'label' => 'Employé',
             'mapped' => true,
             'class' => Employee::class,
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('e')
+                    ->where('e.active = true');
+            },
             'choice_label' => function($employee){
                 return $employee->getName().' '.$employee->getSurname();
             }

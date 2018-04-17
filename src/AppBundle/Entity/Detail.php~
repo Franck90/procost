@@ -51,7 +51,7 @@ class Detail
      */
     public function __construct()
     {
-        $this->date = new DateTime("now");
+        $this->date = new \DateTime("now");
     }
 
 
@@ -135,5 +135,29 @@ class Detail
     public function getEmployee()
     {
         return $this->employee;
+    }
+
+    /**
+     * Set project
+     *
+     * @param \AppBundle\Entity\Project $project
+     *
+     * @return Detail
+     */
+    public function setProject(\AppBundle\Entity\Project $project = null)
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    /**
+     * Get project
+     *
+     * @return \AppBundle\Entity\Project
+     */
+    public function getProject()
+    {
+        return $this->project;
     }
 }

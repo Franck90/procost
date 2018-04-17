@@ -50,9 +50,9 @@ class Project
     private $date;
 
     /**
-     * @var string
+     * @var boolean
      *
-     * @ORM\Column(name="send", type="string", length=255)
+     * @ORM\Column(name="send", type="boolean", length=255)
      */
     private $send;
 
@@ -176,7 +176,7 @@ class Project
     /**
      * Set send
      *
-     * @param string $send
+     * @param boolean $send
      *
      * @return Project
      */
@@ -190,7 +190,7 @@ class Project
     /**
      * Get send
      *
-     * @return string
+     * @return boolean
      */
     public function getSend()
     {
@@ -237,5 +237,39 @@ class Project
     public function getEmployee()
     {
         return $this->employee;
+    }
+
+    /**
+     * Add detail
+     *
+     * @param \AppBundle\Entity\Detail $detail
+     *
+     * @return Project
+     */
+    public function addDetail(\AppBundle\Entity\Detail $detail)
+    {
+        $this->detail[] = $detail;
+
+        return $this;
+    }
+
+    /**
+     * Remove detail
+     *
+     * @param \AppBundle\Entity\Detail $detail
+     */
+    public function removeDetail(\AppBundle\Entity\Detail $detail)
+    {
+        $this->detail->removeElement($detail);
+    }
+
+    /**
+     * Get detail
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDetail()
+    {
+        return $this->detail;
     }
 }

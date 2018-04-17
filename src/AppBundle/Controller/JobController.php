@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Job;
 use AppBundle\Form\JobType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,10 +18,16 @@ class JobController extends Controller
     public function jobAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $job = $em->getRepository('AppBundle:Job')->findAll();
+
+        $jobs = $this->get('knp_paginator')->paginate(
+
+            $em->getRepository('AppBundle:Job')->findAll(),
+            $request->query->get('page', 1),
+            10
+        );
 
         return $this->render('job/job.html.twig', array(
-            "jobs" => $job)
+            "jobs" => $jobs)
         );
     }
 
@@ -81,13 +88,20 @@ class JobController extends Controller
      */
     public function jobDeleteAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
+        try {
+            $em = $this->getDoctrine()->getManager();
 
-        $jobToDelete = $this->getDoctrine()->getRepository('AppBundle:Job')->findOneById($id);
+            $jobToDelete = $this->getDoctrine()->getRepository('AppBundle:Job')->findOneById($id);
 
-        $em->remove($jobToDelete);
-        $em->flush();
+            $em->remove($jobToDelete);
+            $em->flush();
 
-        return $this->redirectToRoute('job');
+            $this->get('session')->getFlashBag()->add('confirmation', "Le métier a bien été supprimé");
+            return $this->redirectToRoute('job');
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add('error', "Le métier appartient à un employer, suppression impossible");
+            return $this->redirectToRoute('job');
+        }
+
     }
 }

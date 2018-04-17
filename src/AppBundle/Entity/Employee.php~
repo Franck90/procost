@@ -311,4 +311,28 @@ class Employee
     {
         return $this->detail;
     }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return Employee
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
 }

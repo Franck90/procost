@@ -5,8 +5,10 @@ namespace AppBundle\Form;
 use AppBundle\Entity\Employee;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,10 +30,14 @@ class EmployeeType extends AbstractType
                 return $job->getName();
             }
         ));
-        $builder->add('cost', TextType::class, array('label' => 'Coût journalier (en €)'));
+        $builder->add('cost', NumberType::class, array('label' => 'Coût journalier (en €)'));
         $builder->add('date', DateType::class, array(
             'label' => 'Date d\'embauche',
             'widget' => 'single_text',
+        ));
+        $builder->add('active', CheckboxType::class, array(
+            'label'    => 'Actif',
+            'required' => false
         ));
         $builder->add('save', SubmitType::class, array('label' => 'Enregistrer'));
 

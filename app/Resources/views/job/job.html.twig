@@ -51,23 +51,24 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-2 col-sm-2 col-md-offset-5">
+
+            <div class="col-sm-12">
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                {% for message in app.flashes('confirmation') %}
+                    <div class="alert alert-success" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="col-sm-6 col-md-offset-5">
                 <div class="pagination">
-                    <a href="#">
-                        <span class="badge bg-default">
-                            <i class="fa fa-chevron-left"></i>
-                        </span>
-                    </a>
-                    <a href="#"><span class="badge bg-theme">1</span></a>
-                    <a href="#"><span class="badge bg-default">2</span></a>
-                    <a href="#"><span class="badge bg-default">3</span></a>
-                    <a href="#"><span class="badge bg-default">4</span></a>
-                    <a href="#"><span class="badge bg-default">5</span></a>
-                    <a href="#">
-                        <span class="badge bg-default">
-                            <i class="fa fa-chevron-right"></i>
-                        </span>
-                    </a>
+                    <div class="text-center">{{ knp_pagination_render(jobs) }}</div>
                 </div>
             </div>
         </div>

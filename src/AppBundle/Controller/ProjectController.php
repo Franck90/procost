@@ -25,7 +25,13 @@ class ProjectController extends Controller
     public function projectAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $projects = $em->getRepository('AppBundle:Project')->findAll();
+
+        $projects = $this->get('knp_paginator')->paginate(
+
+            $em->getRepository('AppBundle:Project')->findAll(),
+            $request->query->get('page', 1),
+            10
+        );
 
         return $this->render('project/project.html.twig', array(
                 "projects" => $projects)
@@ -108,7 +114,6 @@ class ProjectController extends Controller
         $project = $em->getRepository('AppBundle:Project')->find($id);
 
         $detailList = $this->get('knp_paginator')->paginate(
-
             $em->getRepository('AppBundle:Detail')->findBy(array('project' => $project->getId()), array('date' => 'desc')),
             $request->query->get('page', 1),
             10
@@ -129,11 +134,72 @@ class ProjectController extends Controller
             ));
         }
 
+        $employeesOnProject = array();
+        $employees = $em->getRepository('AppBundle:Employee')->findAll();
+        $employeesIdOnProject = $em->getRepository('AppBundle:Detail')->findBy(array('project' => $id));
+
+        foreach ($employeesIdOnProject as $employeeIdOnProject){
+
+            foreach ($employees as $employee){
+
+                if( $employee->getId() == $employeeIdOnProject->getEmployee()->getId()){
+                    array_push($employeesOnProject, $employee);
+                }
+            }
+        }
+
+        $totalCost = 0;
+
+        foreach ($employeesOnProject as $employeeOnProject){
+            foreach ($detailList as $detail){
+                if($employeeOnProject->getId() == $detail->getEmployee()->getId()){
+                    $totalCost += ($detail->getDuration() * $employeeOnProject->getCost());
+                }
+            }
+        }
+
         return $this->render('project/project_detail.html.twig', array(
             'project' => $project,
             'detailList' => $detailList,
+            'totalEmployee' => count($employeesOnProject),
+            'totalCost' => $totalCost,
             'form' => $form->createView()
         ));
+    }
+
+    /**
+     * @Route("project/{id}/detail/{idDetail}/delete", name="detail_project_delete", requirements={"id"="\d+", "idDetail"="\d+"})
+     */
+    public function detailDeleteAction(Request $request, $id, $idDetail)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $detail = $em->getRepository('AppBundle:Detail')->find($idDetail);
+        $em->remove($detail);
+        $em->flush();
+
+
+        return $this->projectDetailAction($request, $id);
+    }
+
+    /**
+     * @Route("/project/{id}/send/", name="project_send", requirements = {"id"="\d+"})
+     */
+    public function employeeActivateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $projectToActivate = $this->getDoctrine()->getRepository('AppBundle:Project')->findOneById($id);
+
+        if($projectToActivate->getSend() == true){
+            $projectToActivate->setSend(false);
+        }else{
+            $projectToActivate->setSend(true);
+        }
+
+        $em->persist($projectToActivate);
+        $em->flush();
+
+        return $this->redirectToRoute('project');
     }
 
 }

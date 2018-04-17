@@ -19,7 +19,6 @@ class EmployeeController extends Controller
     public function employeeAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        //$employees = $em->getRepository('AppBundle:Employee')->findAll();
 
         $employees = $this->get('knp_paginator')->paginate(
 
@@ -231,7 +230,7 @@ class EmployeeController extends Controller
     }
 
     /**
-     * @Route("employee/{id}/detail/{idDetail}/delete", name="detail_delete", requirements={"id"="\d+", "idDetail"="\d+"})
+     * @Route("employee/{id}/detail/{idDetail}/delete", name="detail_employee_delete", requirements={"id"="\d+", "idDetail"="\d+"})
      */
     public function detailDeleteAction(Request $request, $id, $idDetail)
     {

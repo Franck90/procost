@@ -50,9 +50,9 @@ class Project
     private $date;
 
     /**
-     * @var string
+     * @var boolean
      *
-     * @ORM\Column(name="send", type="string", length=255)
+     * @ORM\Column(name="send", type="boolean", length=255)
      */
     private $send;
 
@@ -176,7 +176,7 @@ class Project
     /**
      * Set send
      *
-     * @param string $send
+     * @param boolean $send
      *
      * @return Project
      */
@@ -190,7 +190,7 @@ class Project
     /**
      * Get send
      *
-     * @return string
+     * @return boolean
      */
     public function getSend()
     {

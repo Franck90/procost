@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\Project;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,11 +29,9 @@ class ProjectType extends AbstractType
             'label' => 'Date de création',
             'widget' => 'single_text',
         ));
-        $builder->add('send', ChoiceType::class, array(
-            'choices'  => array(
-                'Oui' => 'oui',
-                'Non' => 'non',
-            ),
+        $builder->add('send', CheckboxType::class, array(
+            'label'    => 'Terminé',
+            'required' => false
         ));
         $builder->add('save', SubmitType::class, array('label' => 'Enregistrer'));
 

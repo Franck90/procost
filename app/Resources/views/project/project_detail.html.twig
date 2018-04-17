@@ -14,6 +14,7 @@
 {% endblock %}
 
 {% block body %}
+
     <section class="wrapper">
 
         <h3><i class="fa fa-angle-right"></i> Suivi du projet {{ project.name }}</h3>
@@ -24,6 +25,7 @@
                     <div class="form-panel">
                         <table class="table table-bordered table-striped table-condensed">
                             <tbody>
+
                                 {% if project is defined %}
                                     <tr>
                                         <th>Intitulé</th>
@@ -45,16 +47,29 @@
                                         <th>Livré</th>
                                         <td>{{ project.send }}</td>
                                     </tr>
+                                    <tr>
+                                        <th>Nombre d'employé</th>
+                                        <td>{{ totalEmployee }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Coût total</th>
+                                        <td>{{ totalCost }} €</td>
+                                    </tr>
+
                                 {% endif %}
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="form-panel">
-                        {{ form(form) }}
+
+                {% if not project.send %}
+                    <div class="row">
+                        <div class="form-panel">
+                            {{ form(form) }}
+                        </div>
                     </div>
-                </div>
+                {% endif %}
+
             </div>
             <div class="col-lg-7 main-chart">
                 <h4>Historique des temps de production :</h4>
@@ -65,7 +80,9 @@
                             <th>Temps</th>
                             <th>Date de saisie</th>
                             <th>Coût total</th>
-                            <th>Actions</th>
+                            {% if not project.send %}
+                                <th>Actions</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -87,13 +104,18 @@
                                         {{ detail.date | date('d/m/Y') }}
                                     </th>
                                     <th>
-                                        {{ detail.employee.cost|number_format * detail.duration|number_format }} €
+                                        {% set employeeCost = 0 + detail.employee.cost|number_format(2,'.',',') %}
+                                        {% set duration = 0 + detail.duration|number_format(2,'.',',') %}
+                                        {{ (employeeCost * duration)|number_format(2,'.',',')}} €
                                     </th>
-                                    <th>
-                                        <a href="{{ path('detail_delete', {'id' : project.id , 'idDetail' : detail.id}) }}" class="btn btn-danger btn-xs">
-                                            <i class="fa fa-trash-o"></i>
-                                        </a>
-                                    </th>
+
+                                    {% if not project.send %}
+                                        <th>
+                                            <a href="{{ path('detail_project_delete', {'id' : project.id , 'idDetail' : detail.id}) }}" class="btn btn-danger btn-xs">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </th>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                         {% endif %}

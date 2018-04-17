@@ -132,7 +132,7 @@
                                         {{ detail.employee.cost|number_format * detail.duration|number_format }} €
                                     </th>
                                     <th>
-                                        <a href="{{ path('detail_delete', {'id' : employee.id , 'idDetail' : detail.id}) }}" class="btn btn-danger btn-xs">
+                                        <a href="{{ path('detail_employee_delete', {'id' : employee.id , 'idDetail' : detail.id}) }}" class="btn btn-danger btn-xs">
                                             <i class="fa fa-trash-o"></i>
                                         </a>
                                     </th>
