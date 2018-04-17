@@ -8,7 +8,10 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Detail;
 use AppBundle\Entity\Project;
+use AppBundle\Form\DetailProjectType;
+use AppBundle\Form\DetailType;
 use AppBundle\Form\ProjectType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -54,7 +57,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project/edit/{id}/", name="project_edit", requirements = {"id"="\d+"})
+     * @Route("/project/{id}/edit/", name="project_edit", requirements = {"id"="\d+"})
      */
     public function projectEditAction(Request $request, $id)
     {
@@ -82,7 +85,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project/delete/{id}", name="project_delete", requirements = {"id"="\d+"})
+     * @Route("/project/{id}/delete/", name="project_delete", requirements = {"id"="\d+"})
      */
     public function projectDeleteAction(Request $request, $id)
     {
@@ -95,4 +98,42 @@ class ProjectController extends Controller
 
         return $this->redirectToRoute('project');
     }
+
+    /**
+     * @Route("/project/{id}/detail/", name="project_detail", requirements= {"id"="\d+"})
+     */
+    public function projectDetailAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $project = $em->getRepository('AppBundle:Project')->find($id);
+
+        $detailList = $this->get('knp_paginator')->paginate(
+
+            $em->getRepository('AppBundle:Detail')->findBy(array('project' => $project->getId()), array('date' => 'desc')),
+            $request->query->get('page', 1),
+            10
+        );
+
+        $detail = new Detail();
+        $detail->setProject($project);
+
+        $form = $this->createForm(DetailProjectType::class, $detail);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $em->persist($detail);
+            $em->flush();
+
+            return $this->redirectToRoute("project_detail", array(
+                'id' => $id
+            ));
+        }
+
+        return $this->render('project/project_detail.html.twig', array(
+            'project' => $project,
+            'detailList' => $detailList,
+            'form' => $form->createView()
+        ));
+    }
+
 }

@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use AppBundle\Entity\Detail;
+use AppBundle\Entity\Employee;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -11,16 +12,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use AppBundle\Entity\Project;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class DetailType extends AbstractType
+class DetailProjectType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('project', EntityType::class, array(
-            'label' => 'Projet',
+        $builder->add('employee', EntityType::class, array(
+            'label' => 'Employé',
             'mapped' => true,
-            'class' => Project::class,
-            'choice_label' => function($project){
-                return $project->getName();
+            'class' => Employee::class,
+            'choice_label' => function($employee){
+                return $employee->getName().' '.$employee->getSurname();
             }
         ));
 

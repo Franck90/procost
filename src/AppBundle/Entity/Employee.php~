@@ -57,6 +57,13 @@ class Employee
     private $date;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="active", type="boolean", options={"default":true})
+     */
+    private $active;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Job", inversedBy="employees")
      * @ORM\JoinColumn(name="job_id", referencedColumnName="id")
      */

@@ -57,6 +57,13 @@ class Employee
     private $date;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="active", type="boolean", options={"default":true})
+     */
+    private $active;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Job", inversedBy="employees")
      * @ORM\JoinColumn(name="job_id", referencedColumnName="id")
      */
@@ -303,5 +310,29 @@ class Employee
     public function getDetail()
     {
         return $this->detail;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     *
+     * @return Employee
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 }

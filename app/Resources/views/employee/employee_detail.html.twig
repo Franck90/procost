@@ -16,7 +16,11 @@
 {% block body %}
     <section class="wrapper">
 
-        <h3><i class="fa fa-angle-right"></i> Suivi de {{ employee.name }} {{ employee.surname }}"</h3>
+    {% if employee.active %}
+        <h3><i class="fa fa-angle-right"></i> Suivi de {{ employee.name }} {{ employee.surname }}</h3>
+    {% else %}
+        <h3><i class="fa fa-angle-right"></i> Suivi de <strike>{{ employee.name }} {{ employee.surname }}</strike></h3>
+    {% endif %}
 
         <div class="row">
             <div class="col-lg-5">
@@ -25,35 +29,67 @@
                         <table class="table table-bordered table-striped table-condensed">
                             <tbody>
                                 {% if employee is defined %}
-                                    <tr>
-                                        <th>Prénom</th>
-                                        <td>{{ employee.name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Nom</th>
-                                        <td>{{ employee.surname }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Email</th>
-                                        <td>{{ employee.mail }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Métier</th>
-                                        <td>{{ employee.job.name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Coût (jour)</th>
-                                        <td>{{ employee.cost }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Date d'embauche</th>
-                                        <td>{{ employee.date |date('d/m/Y') }}</td>
-                                    </tr>
+                                    {% if employee.active %}
+                                        <tr>
+                                            <th>Prénom</th>
+                                            <td>{{ employee.name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <td>{{ employee.surname }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Email</th>
+                                            <td>{{ employee.mail }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Métier</th>
+                                            <td>{{ employee.job.name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Coût (jour)</th>
+                                            <td>{{ employee.cost }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Date d'embauche</th>
+                                            <td>{{ employee.date |date('d/m/Y') }}</td>
+                                        </tr>
+                                    {% else %}
+
+                                        <tr>
+                                            <th>Prénom</th>
+                                            <td><strike>{{ employee.name }}</strike></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <td><strike>{{ employee.surname }}</strike></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Email</th>
+                                            <td><strike>{{ employee.mail }}</strike></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Métier</th>
+                                            <td><strike>{{ employee.job.name }}</strike></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Coût (jour)</th>
+                                            <td><strike>{{ employee.cost }}</strike></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Date d'embauche</th>
+                                            <td><strike>{{ employee.date |date('d/m/Y') }}</strike></td>
+                                        </tr>
+                                    {% endif %}
                                 {% endif %}
                             </tbody>
                         </table>
-                        <a class="btn btn-success btn-sm" href="#">Modifier</a>
-                        <a class="btn btn-danger btn-sm" href="#">Archiver</a>
+                        <a class="btn btn-success btn-sm" href="{{ path('employee_edit', {'id' : employee.id}) }}">Modifier</a>
+                        {% if employee.active %}
+                            <a class="btn btn-danger btn-sm" href="{{ path('employee_detail_desactivate', {'id' : employee.id}) }}">Archiver</a>
+                        {% else %}
+                            <a class="btn btn-primary btn-sm" href="{{ path('employee_detail_activate', {'id' : employee.id}) }}">Activer</a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="row">
@@ -80,7 +116,7 @@
                             {% for detail in detailList %}
                                 <tr>
                                     <th>
-                                        <a href="#">{{ detail.project.name }}</a>
+                                        <a href="{{ path('project') }}">{{ detail.project.name }}</a>
                                     </th>
                                     <th>
                                         {% if detail.duration == 1 %}
@@ -96,44 +132,18 @@
                                         {{ detail.employee.cost|number_format * detail.duration|number_format }} €
                                     </th>
                                     <th>
-                                        <a href="#" class="btn btn-danger btn-xs">
+                                        <a href="{{ path('detail_delete', {'id' : employee.id , 'idDetail' : detail.id}) }}" class="btn btn-danger btn-xs">
                                             <i class="fa fa-trash-o"></i>
                                         </a>
                                     </th>
                                 </tr>
                             {% endfor %}
                         {% endif %}
-                        <!--
-                        <tr>
-                            <th><a href="#">Nom du projet</a></th>
-                            <th>4 j</th>
-                            <th>23/03/2018</th>
-                            <th>1 200 €</th>
-                            <th>
-                                <a href="#" class="btn btn-danger btn-xs">
-                                    <i class="fa fa-trash-o"></i>
-                                </a>
-                            </th>
-                        </tr>-->
                     </tbody>
                 </table>
-                <div class="col-md-3 col-sm-3 col-md-offset-4">
+                <div class="col-sm-6 col-md-offset-3">
                     <div class="pagination">
-                        <a href="#">
-                            <span class="badge bg-default">
-                                <i class="fa fa-chevron-left"></i>
-                            </span>
-                        </a>
-                        <a href="#"><span class="badge bg-theme">1</span></a>
-                        <a href="#"><span class="badge bg-default">2</span></a>
-                        <a href="#"><span class="badge bg-default">3</span></a>
-                        <a href="#"><span class="badge bg-default">4</span></a>
-                        <a href="#"><span class="badge bg-default">5</span></a>
-                        <a href="#">
-                            <span class="badge bg-default">
-                                <i class="fa fa-chevron-right"></i>
-                            </span>
-                        </a>
+                        <div class="text-center">{{ knp_pagination_render(detailList) }}</div>
                     </div>
                 </div>
             </div>

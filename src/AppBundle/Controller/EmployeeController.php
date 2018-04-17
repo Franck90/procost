@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Detail;
 use AppBundle\Entity\Employee;
-use AppBundle\Form\DetailType;
+use AppBundle\Form\DetailEmployeeType;
 use AppBundle\Form\EmployeeType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,7 +19,14 @@ class EmployeeController extends Controller
     public function employeeAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $employees = $em->getRepository('AppBundle:Employee')->findAll();
+        //$employees = $em->getRepository('AppBundle:Employee')->findAll();
+
+        $employees = $this->get('knp_paginator')->paginate(
+
+            $em->getRepository('AppBundle:Employee')->findAll(),
+            $request->query->get('page', 1),
+            10
+        );
 
         return $this->render('employee/employee.html.twig', array(
                 "employees" => $employees)
@@ -51,7 +58,7 @@ class EmployeeController extends Controller
     }
 
     /**
-     * @Route("/employee/edit/{id}/", name="employee_edit", requirements = {"id"="\d+"})
+     * @Route("/employee/{id}/edit/", name="employee_edit", requirements = {"id"="\d+"})
      */
     public function employeeEditAction(Request $request, $id)
     {
@@ -79,22 +86,41 @@ class EmployeeController extends Controller
     }
 
     /**
-     * @Route("/employee/delete/{id}", name="employee_delete", requirements = {"id"="\d+"})
+     * @Route("/employee/{id}/desactivate/", name="employee_desactivate", requirements = {"id"="\d+"})
      */
-    public function employeeDeleteAction(Request $request, $id)
+    public function employeeDesactivateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $employeeToDelete = $this->getDoctrine()->getRepository('AppBundle:Employee')->findOneById($id);
+        $employeeToDesactivate = $this->getDoctrine()->getRepository('AppBundle:Employee')->findOneById($id);
 
-        $em->remove($employeeToDelete);
+        $employeeToDesactivate->setActive(false);
+
+        $em->persist($employeeToDesactivate);
         $em->flush();
 
         return $this->redirectToRoute('employee');
     }
 
     /**
-     * @Route("employee/detail/{id}", name="employee_detail", requirements= {"id"="\d+"})
+     * @Route("/employee/{id}/activate/", name="employee_activate", requirements = {"id"="\d+"})
+     */
+    public function employeeActivateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $employeeToActivate = $this->getDoctrine()->getRepository('AppBundle:Employee')->findOneById($id);
+
+        $employeeToActivate->setActive(true);
+
+        $em->persist($employeeToActivate);
+        $em->flush();
+
+        return $this->redirectToRoute('employee');
+    }
+
+    /**
+     * @Route("employee/{id}/detail/", name="employee_detail", requirements= {"id"="\d+"})
      */
     public function employeeDetailAction(Request $request, $id)
     {
@@ -111,7 +137,7 @@ class EmployeeController extends Controller
         $detail = new Detail();
         $detail->setEmployee($employee);
 
-        $form = $this->createForm(DetailType::class, $detail);
+        $form = $this->createForm(DetailEmployeeType::class, $detail);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
@@ -128,34 +154,93 @@ class EmployeeController extends Controller
             'detailList' => $detailList,
             'form' => $form->createView()
         ));
+    }
 
-        /*$em = $this->getDoctrine()->getManager();
-        $employee = $this->getDoctrine()->getRepository('AppBundle:Employee')->findOneById($id);
+    /**
+     * @Route("employee/{id}/detail/activate", name="employee_detail_activate", requirements= {"id"="\d+"})
+     */
+    public function employeeDetailActivateAction(Request $request, $id){
+        $em = $this->getDoctrine()->getManager();
+        $employee = $em->getRepository('AppBundle:Employee')->find($id);
+        $employee->setActive(true);
 
-        $detail = $this->getDoctrine()->getRepository('AppBundle:Detail')->findBy(array(
-            'employee_id' => $id));
+        $detailList = $this->get('knp_paginator')->paginate(
 
+            $em->getRepository('AppBundle:Detail')->findBy(array('employee' => $employee->getId()), array('date' => 'desc')),
+            $request->query->get('page', 1),
+            10
+        );
 
-        $form = $this->createForm(DetailType::class, $detail);
+        $detail = new Detail();
+        $detail->setEmployee($employee);
 
+        $form = $this->createForm(DetailEmployeeType::class, $detail);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $newDetail = new Detail();
-            $newDetail->setEmployee($employee);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($newDetail);
+        if($form->isSubmitted() && $form->isValid()){
+            $em->persist($detail);
             $em->flush();
 
-            return $this->redirectToRoute('employee_detail', array('id' => $id));
+            return $this->redirectToRoute("employee_detail", array(
+                'id' => $id
+            ));
         }
 
         return $this->render('employee/employee_detail.html.twig', array(
-                "employee" => $employee,
-                "detail" => $detail,
-                'form' => $form->createView()
-        ));*/
+            'employee' => $employee,
+            'detailList' => $detailList,
+            'form' => $form->createView()
+        ));
+    }
 
+    /**
+     * @Route("employee/{id}/detail/desactivate", name="employee_detail_desactivate", requirements= {"id"="\d+"})
+     */
+    public function employeeDetailDesactivateAction(Request $request, $id){
+        $em = $this->getDoctrine()->getManager();
+        $employee = $em->getRepository('AppBundle:Employee')->find($id);
+        $employee->setActive(false);
+
+        $detailList = $this->get('knp_paginator')->paginate(
+
+            $em->getRepository('AppBundle:Detail')->findBy(array('employee' => $employee->getId()), array('date' => 'desc')),
+            $request->query->get('page', 1),
+            10
+        );
+
+        $detail = new Detail();
+        $detail->setEmployee($employee);
+
+        $form = $this->createForm(DetailEmployeeType::class, $detail);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $em->persist($detail);
+            $em->flush();
+
+            return $this->render("employee_detail", array(
+                'id' => $id
+            ));
+        }
+
+        return $this->render('employee/employee_detail.html.twig', array(
+            'employee' => $employee,
+            'detailList' => $detailList,
+            'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("employee/{id}/detail/{idDetail}/delete", name="detail_delete", requirements={"id"="\d+", "idDetail"="\d+"})
+     */
+    public function detailDeleteAction(Request $request, $id, $idDetail)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $detail = $em->getRepository('AppBundle:Detail')->find($idDetail);
+        $em->remove($detail);
+        $em->flush();
+
+
+        return $this->employeeDetailAction($request, $id);
     }
 }

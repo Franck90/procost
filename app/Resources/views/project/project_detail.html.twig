@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    PROCOST - Details d'un projet
+{% endblock %}
+
+{% block project %}
+    <li class="sub-menu">
+        <a class="active" href="{{ path('project') }}">
+            <i class="fa fa-users"></i>
+            <span>Les projets</span>
+        </a>
+    </li>
+{% endblock %}
+
+{% block body %}
+    <section class="wrapper">
+
+        <h3><i class="fa fa-angle-right"></i> Suivi du projet {{ project.name }}</h3>
+
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="row">
+                    <div class="form-panel">
+                        <table class="table table-bordered table-striped table-condensed">
+                            <tbody>
+                                {% if project is defined %}
+                                    <tr>
+                                        <th>Intitulé</th>
+                                        <td>{{ project.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Description</th>
+                                        <td>{{ project.description }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Type</th>
+                                        <td>{{ project.type }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date de création</th>
+                                        <td>{{ project.date | date('d/m/Y') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Livré</th>
+                                        <td>{{ project.send }}</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-panel">
+                        {{ form(form) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7 main-chart">
+                <h4>Historique des temps de production :</h4>
+                <table class="table table-bordered table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Employé</th>
+                            <th>Temps</th>
+                            <th>Date de saisie</th>
+                            <th>Coût total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% if detailList is defined %}
+                            {% for detail in detailList %}
+                                <tr>
+                                    <th>
+                                        <a href="{{ path('employee') }}">{{ detail.employee.name }} {{ detail.employee.surname }}</a>
+                                    </th>
+                                    <th>
+                                        {% if detail.duration == 1 %}
+                                            1 jour
+                                        {% else %}
+                                            {{ detail.duration }} jours
+                                        {% endif %}
+                                    </th>
+                                    <th>
+                                        {{ detail.date | date('d/m/Y') }}
+                                    </th>
+                                    <th>
+                                        {{ detail.employee.cost|number_format * detail.duration|number_format }} €
+                                    </th>
+                                    <th>
+                                        <a href="{{ path('detail_delete', {'id' : project.id , 'idDetail' : detail.id}) }}" class="btn btn-danger btn-xs">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    </th>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+                <div class="col-sm-6 col-md-offset-3">
+                    <div class="pagination">
+                        <div class="text-center">{{ knp_pagination_render(detailList) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
