@@ -21,32 +21,46 @@
 
                 <div class="row mtbox">
                     <div class="col-md-2 col-sm-2 col-md-offset-2 box0">
-                        <div class="box1">
-                            <span class="li_stack"></span>
-                            <h3>93</h3>
-                        </div>
-                        <p>93 projets en réalisation</p>
+                        {% if totalProjects is defined %}
+                            <div class="box1">
+                                <span class="li_stack"></span>
+                                <h3>
+                                    {{ totalProjects }}
+                                </h3>
+                            </div>
+                            <p>{{ totalProjects }} projets en réalisation</p>
+                        {% endif %}
                     </div>
                     <div class="col-md-2 col-sm-2 box0">
-                        <div class="box1">
-                            <span class="li_cloud"></span>
-                            <h3>48</h3>
-                        </div>
-                        <p>48 projets livrés</p>
+                        {% if totalProjectsSend is defined %}
+                            <div class="box1">
+                                <span class="li_cloud"></span>
+                                <h3>
+                                    {{ totalProjectsSend }}
+                                </h3>
+                            </div>
+                            <p>{{ totalProjectsSend }} projets livrés</p>
+                        {% endif %}
                     </div>
                     <div class="col-md-2 col-sm-2 box0">
-                        <div class="box1">
-                            <span class="li_user"></span>
-                            <h3>19</h3>
-                        </div>
-                        <p>19 employés enregistrés</p>
+                        {% if totalEmployees is defined %}
+                            <div class="box1">
+                                <span class="li_user"></span>
+                                <h3>
+                                    {{ totalEmployees }}
+                                </h3>
+                            </div>
+                            <p>{{ totalEmployees }} employés enregistrés</p>
+                        {% endif %}
                     </div>
                     <div class="col-md-2 col-sm-2 box0">
-                        <div class="box1">
-                            <span class="li_heart"></span>
-                            <h3>267</h3>
-                        </div>
-                        <p>267 jours de production</p>
+                        {% if duration is defined %}
+                            <div class="box1">
+                                <span class="li_heart"></span>
+                                <h3>{{ duration }}</h3>
+                            </div>
+                            <p>{{ duration }} jours de production</p>
+                        {% endif %}
                     </div>
                 </div>
                 <!-- /row mt -->
@@ -60,12 +74,12 @@
                             <div class="row">
                                 <div class="col-sm-6 col-xs-6 goleft">
                                     <p>
-                                        <i class="fa fa-database"></i> 70% CAPEX</p>
+                                        <i class="fa fa-database"></i> {{ totalCapex }}% CAPEX</p>
                                 </div>
                             </div>
                             <canvas id="ratio" height="120" width="120"></canvas>
                             <script>
-                                var doughnutData = [{ value: 70, color: "#68dff0" }, { value: 30, color: "#fdfdfd" }];
+                                var doughnutData = [{ value: {{ totalCapex }}, color: "#68dff0" }, { value: {{ 99 }}, color: "#fdfdfd" }];
                                 var myDoughnut = new Chart(document.getElementById("ratio").getContext("2d")).Doughnut(doughnutData);
                             </script>
                         </div>

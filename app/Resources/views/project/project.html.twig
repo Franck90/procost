@@ -72,7 +72,7 @@
                                         <a href="{{ path('project_send', {'id' : project.id}) }}" class="btn btn-default btn-xs">
                                             <i class="fa fa-arrow-up"></i>
                                         </a>
-                                        <a href="{{ path('project_delete', {'id' : project.id}) }}" class="btn btn-danger btn-xs">
+                                        <a href="{{ path('project_delete', {'id' : project.id}) }}" class="btn btn-danger btn-xs" onclick="return confirm('Etes-vous sûr de vouloir supprimer ce projet ?')">
                                             <i class="fa fa-trash-o"></i>
                                         </a>
                                     {% endif %}

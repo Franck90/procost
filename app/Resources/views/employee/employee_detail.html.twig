@@ -16,11 +16,11 @@
 {% block body %}
     <section class="wrapper">
 
-    {% if employee.active %}
-        <h3><i class="fa fa-angle-right"></i> Suivi de {{ employee.name }} {{ employee.surname }}</h3>
-    {% else %}
-        <h3><i class="fa fa-angle-right"></i> Suivi de <strike>{{ employee.name }} {{ employee.surname }}</strike></h3>
-    {% endif %}
+        {% if employee.active %}
+            <h3><i class="fa fa-angle-right"></i> Suivi de {{ employee.name }} {{ employee.surname }}</h3>
+        {% else %}
+            <h3><i class="fa fa-angle-right"></i> Suivi de <strike>{{ employee.name }} {{ employee.surname }}</strike></h3>
+        {% endif %}
 
         <div class="row">
             <div class="col-lg-5">
@@ -84,19 +84,27 @@
                                 {% endif %}
                             </tbody>
                         </table>
-                        <a class="btn btn-success btn-sm" href="{{ path('employee_edit', {'id' : employee.id}) }}">Modifier</a>
-                        {% if employee.active %}
-                            <a class="btn btn-danger btn-sm" href="{{ path('employee_detail_desactivate', {'id' : employee.id}) }}">Archiver</a>
-                        {% else %}
-                            <a class="btn btn-primary btn-sm" href="{{ path('employee_detail_activate', {'id' : employee.id}) }}">Activer</a>
+                        {% if employee is defined %}
+                            {% if employee.active %}
+                                <a class="btn btn-success btn-sm" href="{{ path('employee_detail_edit', {'id' : employee.id}) }}">Modifier</a>
+                                <a class="btn btn-danger btn-sm" href="{{ path('employee_detail_desactivate', {'id' : employee.id}) }}">Archiver</a>
+                            {% else %}
+                                <a class="btn btn-primary btn-sm" href="{{ path('employee_detail_activate', {'id' : employee.id}) }}">Activer</a>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="form-panel">
-                        {{ form(form) }}
-                    </div>
-                </div>
+
+                {% if employee is defined %}
+                    {% if employee.active %}
+                        <div class="row">
+                            <div class="form-panel">
+                                {{ form(form) }}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
             </div>
             <div class="col-lg-7 main-chart">
                 <h4>Historique des temps de production :</h4>
@@ -107,7 +115,11 @@
                             <th>Temps</th>
                             <th>Date de saisie</th>
                             <th>Coût total</th>
-                            <th>Actions</th>
+                            {% if employee is defined %}
+                                {% if employee.active %}
+                                    <th>Actions</th>
+                                {% endif %}
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -116,7 +128,7 @@
                             {% for detail in detailList %}
                                 <tr>
                                     <th>
-                                        <a href="{{ path('project') }}">{{ detail.project.name }}</a>
+                                        <a href="{{ path('project_detail', {'id' : detail.project.id}) }}">{{ detail.project.name }}</a>
                                     </th>
                                     <th>
                                         {% if detail.duration == 1 %}
@@ -131,11 +143,15 @@
                                     <th>
                                         {{ detail.employee.cost|number_format * detail.duration|number_format }} €
                                     </th>
-                                    <th>
-                                        <a href="{{ path('detail_employee_delete', {'id' : employee.id , 'idDetail' : detail.id}) }}" class="btn btn-danger btn-xs">
-                                            <i class="fa fa-trash-o"></i>
-                                        </a>
-                                    </th>
+                                    {% if employee is defined %}
+                                        {% if employee.active %}
+                                            <th>
+                                                <a href="{{ path('detail_employee_delete', {'id' : employee.id , 'idDetail' : detail.id}) }}" class="btn btn-danger btn-xs">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
+                                            </th>
+                                        {% endif %}
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                         {% endif %}
@@ -145,6 +161,20 @@
                     <div class="pagination">
                         <div class="text-center">{{ knp_pagination_render(detailList) }}</div>
                     </div>
+                </div>
+
+                <div class="col-sm-12">
+                    {% for message in app.flashes('error') %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+
+                    {% for message in app.flashes('confirmation') %}
+                        <div class="alert alert-success" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

@@ -1,0 +1,40 @@
+<h1>Suppression du projet {{ project.name }} - email de Sauvegarde</h1>
+<div>
+    <table>
+        <tbody>
+
+            {% if project is defined %}
+                <tr>
+                    <th>Intitulé</th>
+                    <td>{{ project.name }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ project.description }}</td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td>{{ project.type }}</td>
+                </tr>
+                <tr>
+                    <th>Date de création</th>
+                    <td>{{ project.date | date('d/m/Y') }}</td>
+                </tr>
+                <tr>
+                    <th>Livré</th>
+                    <td>{{ project.send }}</td>
+                </tr>
+                <tr>
+                    <th>Nombre d'employé</th>
+                    <td>{{ totalEmployee }}</td>
+                </tr>
+                <tr>
+                    <th>Coût total</th>
+                    <td>{{ totalCost }} €</td>
+                </tr>
+
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+

@@ -54,16 +54,16 @@
                                         <a href="{{ path('employee_detail', {'id' : employee.id}) }}" class="btn btn-success btn-xs">
                                             <i class="fa fa-clock-o"></i>
                                         </a>
-                                        <a href="{{ path('employee_edit', {'id' : employee.id}) }}" class="btn btn-primary btn-xs">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
                                         {% if employee.active %}
+                                            <a href="{{ path('employee_edit', {'id' : employee.id}) }}" class="btn btn-primary btn-xs">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
                                             <a href="{{ path('employee_desactivate', {'id' : employee.id, 'fromDetail' : 'false'}) }}" class="btn btn-danger btn-xs">
-                                                <i class="fa fa-trash-o"></i>
+                                                <i class="fa fa-arrow-down"></i>
                                             </a>
                                         {% else %}
                                             <a href="{{ path('employee_activate', {'id' : employee.id, 'fromDetail' : 'false'}) }}" class="btn btn-success btn-xs">
-                                                <i class="fa fa-trash-o"></i>
+                                                <i class="fa fa-arrow-up"></i>
                                             </a>
                                         {% endif %}
                                     </th>
@@ -78,6 +78,21 @@
                     <div class="text-center">{{ knp_pagination_render(employees) }}</div>
                 </div>
             </div>
+
+            <div class="col-sm-12">
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                {% for message in app.flashes('confirmation') %}
+                    <div class="alert alert-success" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+
         </div>
         <!--/row -->
     </section>

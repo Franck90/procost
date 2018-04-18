@@ -45,7 +45,13 @@
                                     </tr>
                                     <tr>
                                         <th>Livré</th>
-                                        <td>{{ project.send }}</td>
+                                        <td>
+                                            {% if project.send %}
+                                                Oui
+                                            {% else %}
+                                                Non
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Nombre d'employé</th>
@@ -62,12 +68,14 @@
                     </div>
                 </div>
 
-                {% if not project.send %}
-                    <div class="row">
-                        <div class="form-panel">
-                            {{ form(form) }}
+                {% if project is defined  %}
+                    {% if not project.send %}
+                        <div class="row">
+                            <div class="form-panel">
+                                {{ form(form) }}
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 {% endif %}
 
             </div>
@@ -80,9 +88,6 @@
                             <th>Temps</th>
                             <th>Date de saisie</th>
                             <th>Coût total</th>
-                            {% if not project.send %}
-                                <th>Actions</th>
-                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -91,7 +96,7 @@
                             {% for detail in detailList %}
                                 <tr>
                                     <th>
-                                        <a href="{{ path('employee') }}">{{ detail.employee.name }} {{ detail.employee.surname }}</a>
+                                        <a href="{{ path('employee_detail', {'id' : detail.employee.id }) }}">{{ detail.employee.name }} {{ detail.employee.surname }}</a>
                                     </th>
                                     <th>
                                         {% if detail.duration == 1 %}
@@ -108,14 +113,6 @@
                                         {% set duration = 0 + detail.duration|number_format(2,'.',',') %}
                                         {{ (employeeCost * duration)|number_format(2,'.',',')}} €
                                     </th>
-
-                                    {% if not project.send %}
-                                        <th>
-                                            <a href="{{ path('detail_project_delete', {'id' : project.id , 'idDetail' : detail.id}) }}" class="btn btn-danger btn-xs">
-                                                <i class="fa fa-trash-o"></i>
-                                            </a>
-                                        </th>
-                                    {% endif %}
                                 </tr>
                             {% endfor %}
                         {% endif %}

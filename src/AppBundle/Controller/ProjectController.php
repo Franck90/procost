@@ -80,6 +80,13 @@ class ProjectController extends Controller
             throw $this->createNotFoundException();
         }
 
+        if($projectToUpdate->getSend())
+        {
+            $this->get('session')->getFlashBag()->add('error', "Projet en production, edition de ce dernier impossible");
+
+            return $this->redirectToRoute('employee');
+        }
+
         $form = $this->createForm(ProjectType::class, $projectToUpdate);
 
         $form->handleRequest($request);
@@ -113,6 +120,32 @@ class ProjectController extends Controller
         if(!$projectToDelete){
             throw $this->createNotFoundException();
         }
+
+        $detailProjectToDelete = $em->getRepository('AppBundle:Detail')->findBy(array('project' => $projectToDelete->getId()), array());
+
+        $totalCost = 0;
+        $arrayEmployee = array();
+
+        foreach ($detailProjectToDelete as $detail)
+        {
+            $totalCost += $detail->getEmployee()->getCost() * $detail->getDuration();
+            array_push($arrayEmployee,$detail->getEmployee()->getId() );
+        }
+
+        $totalEmployee = count(array_unique($arrayEmployee));
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Suppression d\'un projet')
+            ->setFrom('franck.moniez90@gmail.com')
+            ->setTo('franck.moniez90@gmail.com')
+            ->setBody(
+                $this->renderView("mail/mail.html.twig",array(
+                    'project' => $projectToDelete,
+                    'totalCost' => $totalCost,
+                    'totalEmployee' => $totalEmployee
+                )),'text/html');
+
+        $this->get('mailer')->send($message);
 
         $em->remove($projectToDelete);
         $em->flush();
@@ -152,6 +185,16 @@ class ProjectController extends Controller
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+
+            if($detail->getProject()->getSend() == true || $detail->getEmployee()->getActive() == false)
+            {
+                $this->get('session')->getFlashBag()->add('error', "Ajout de temps impossible, le projet est livré ou l'employé est archivé");
+
+                return $this->redirectToRoute("project_detail", array(
+                    'id' => $id
+                ));
+            }
+
             $em->persist($detail);
             $em->flush();
 
@@ -162,75 +205,26 @@ class ProjectController extends Controller
             ));
         }
 
-        $employeesOnProject = array();
-        $employees = $em->getRepository('AppBundle:Employee')->findAll();
-
-        if($employees)
-        {
-            throw $this->createNotFoundException();
-        }
-
-        $employeesIdOnProject = $em->getRepository('AppBundle:Detail')->findBy(array('project' => $id));
-
-        foreach ($employeesIdOnProject as $employeeIdOnProject){
-
-            foreach ($employees as $employee){
-
-                if( $employee->getId() == $employeeIdOnProject->getEmployee()->getId()){
-                    array_push($employeesOnProject, $employee);
-                }
-            }
-        }
-
         $totalCost = 0;
+        $arrayEmployee = array();
 
-        foreach ($employeesOnProject as $employeeOnProject){
-            foreach ($detailList as $detail){
-                if($employeeOnProject->getId() == $detail->getEmployee()->getId()){
-                    $totalCost += ($detail->getDuration() * $employeeOnProject->getCost());
-                }
-            }
+        foreach ($detailList as $detail)
+        {
+            $totalCost += $detail->getEmployee()->getCost() * $detail->getDuration();
+            array_push($arrayEmployee,$detail->getEmployee()->getId() );
         }
+
+        $totalEmployee = count(array_unique($arrayEmployee));
+
+
 
         return $this->render('project/project_detail.html.twig', array(
             'project' => $project,
             'detailList' => $detailList,
-            'totalEmployee' => count($employeesOnProject),
+            'totalEmployee' => $totalEmployee,
             'totalCost' => $totalCost,
             'form' => $form->createView()
         ));
-    }
-
-    /**
-     * @Route("project/{id}/detail/{idDetail}/delete", name="detail_project_delete", requirements={"id"="\d+", "idDetail"="\d+"})
-     */
-    public function detailDeleteAction(Request $request, $id, $idDetail)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $detail = $em->getRepository('AppBundle:Detail')->find($idDetail);
-
-        if($detail)
-        {
-            throw $this->createNotFoundException();
-        }
-
-        if($detail->getProject()->getSend() == true || $detail->getEmployee()->getActive() == false)
-        {
-            $this->get('session')->getFlashBag()->add('error', "Suppression impossible, le projet est livré ou l'employé est archivé");
-
-            return $this->redirectToRoute('project_detail', array(
-                "id" => $id)
-            );
-        }
-
-        $em->remove($detail);
-        $em->flush();
-
-        $this->get('session')->getFlashBag()->add('confirmation', "Succès de la supression de temps sur le projet");
-
-        return $this->redirectToRoute('project_detail', array(
-                "id" => $id)
-        );
     }
 
     /**
@@ -258,7 +252,7 @@ class ProjectController extends Controller
         if($projectToActivate->getSend() == true){
             $this->get('session')->getFlashBag()->add('confirmation', "Projet définit comme étant livré ");
         }else{
-            $this->get('session')->getFlashBag()->add('error', "Projet définit comme étant en développement ");
+            $this->get('session')->getFlashBag()->add('confirmation', "Projet définit comme étant en développement ");
         }
 
         return $this->redirectToRoute('project');

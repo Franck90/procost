@@ -69,8 +69,16 @@ class EmployeeController extends Controller
     {
         $employeeToUpdate = $this->getDoctrine()->getRepository('AppBundle:Employee')->findOneById($id);
 
-        if(!$employeeToUpdate){
+        if(!$employeeToUpdate)
+        {
             throw $this->createNotFoundException();
+        }
+
+        if($employeeToUpdate->getActive() == false)
+        {
+            $this->get('session')->getFlashBag()->add('error', "Employé archivé, edition de son profil impossible");
+
+            return $this->redirectToRoute('employee');
         }
 
         $form = $this->createForm(EmployeeType::class, $employeeToUpdate);
@@ -170,6 +178,16 @@ class EmployeeController extends Controller
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+
+            if($detail->getProject()->getSend() == true || $detail->getEmployee()->getActive() == false)
+            {
+                $this->get('session')->getFlashBag()->add('error', "Ajout de temps impossible, le projet est livré ou l'employé est archivé");
+
+                return $this->redirectToRoute("employee_detail", array(
+                    'id' => $id
+                ));
+            }
+
             $em->persist($detail);
             $em->flush();
 
@@ -193,41 +211,20 @@ class EmployeeController extends Controller
     public function employeeDetailActivateAction(Request $request, $id){
 
         $em = $this->getDoctrine()->getManager();
-        $employee = $em->getRepository('AppBundle:Employee')->find($id);
-        $employee->setActive(true);
+        $employeeToActivate = $em->getRepository('AppBundle:Employee')->find($id);
+        $employeeToActivate->setActive(true);
 
-        $detailList = $this->get('knp_paginator')->paginate(
-
-            $em->getRepository('AppBundle:Detail')->findBy(array('employee' => $employee->getId()), array('date' => 'desc')),
-            $request->query->get('page', 1),
-            10
-        );
-
-        if(!$detailList){
+        if(!$employeeToActivate){
             throw $this->createNotFoundException();
         }
 
-        $detail = new Detail();
-        $detail->setEmployee($employee);
+        $em->persist($employeeToActivate);
+        $em->flush();
 
-        $form = $this->createForm(DetailEmployeeType::class, $detail);
-        $form->handleRequest($request);
+        $this->get('session')->getFlashBag()->add('confirmation', "Employé activé avec succès");
 
-        if($form->isSubmitted() && $form->isValid()){
-            $em->persist($detail);
-            $em->flush();
-
-            $this->get('session')->getFlashBag()->add('confirmation', "Temps de travail ajouté avec succès");
-
-            return $this->redirectToRoute("employee_detail", array(
-                'id' => $id
-            ));
-        }
-
-        return $this->render('employee/employee_detail.html.twig', array(
-            'employee' => $employee,
-            'detailList' => $detailList,
-            'form' => $form->createView()
+        return $this->redirectToRoute('employee_detail', array(
+            "id" => $id
         ));
     }
 
@@ -237,11 +234,17 @@ class EmployeeController extends Controller
     public function employeeDetailDesactivateAction(Request $request, $id){
 
         $em = $this->getDoctrine()->getManager();
-        $employee = $em->getRepository('AppBundle:Employee')->find($id);
-        $employee->setActive(false);
+        $employeeToDesactivate = $em->getRepository('AppBundle:Employee')->find($id);
+        $employeeToDesactivate->setActive(false);
 
-        $em->persist($employee);
+        if(!$employeeToDesactivate){
+            throw $this->createNotFoundException();
+        }
+
+        $em->persist($employeeToDesactivate);
         $em->flush();
+
+        $this->get('session')->getFlashBag()->add('confirmation', "Employé archivé avec succès");
 
         return $this->redirectToRoute('employee_detail', array(
             "id" => $id
@@ -251,15 +254,65 @@ class EmployeeController extends Controller
     /**
      * @Route("employee/{id}/detail/{idDetail}/delete", name="detail_employee_delete", requirements={"id"="\d+", "idDetail"="\d+"})
      */
-    public function detailDeleteAction(Request $request, $id, $idDetail)
+    public function EmployeeDetailDeleteAction(Request $request, $id, $idDetail)
     {
         $em = $this->getDoctrine()->getManager();
-        $detail = $em->getRepository('AppBundle:Detail')->find($idDetail);
-        $em->remove($detail);
+        $detailToDelete = $em->getRepository('AppBundle:Detail')->find($idDetail);
+
+        if(!$detailToDelete){
+            throw $this->createNotFoundException();
+        }
+
+        if($detailToDelete->getProject()->getSend() == true || $detailToDelete->getEmployee()->getActive() == false)
+        {
+            $this->get('session')->getFlashBag()->add('error', "Suppression impossible, le projet est livré ou l'employé est archivé");
+
+            return $this->redirectToRoute('employee_detail', array(
+                    "id" => $id)
+            );
+        }
+
+        $em->remove($detailToDelete);
         $em->flush();
+
+        $this->get('session')->getFlashBag()->add('confirmation', "Suppression du temps de travail sur un projet réalisé avec succès");
 
         return $this->redirectToRoute('employee_detail', array(
             "id" => $id
+        ));
+    }
+
+    /**
+     * @Route("/employee/{id}/detail/edit/", name="employee_detail_edit", requirements = {"id"="\d+"})
+     */
+    public function employeeDetailEditAction(Request $request, $id)
+    {
+        $employeeToUpdate = $this->getDoctrine()->getRepository('AppBundle:Employee')->findOneById($id);
+
+        if(!$employeeToUpdate){
+            throw $this->createNotFoundException();
+        }
+
+        $form = $this->createForm(EmployeeType::class, $employeeToUpdate);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($employeeToUpdate);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('confirmation', "Edition de l'employé réalisé avec succès");
+
+            return $this->redirectToRoute('employee_detail', array(
+                'id' => $id
+            ));
+        }
+
+        return $this->render('employee/employee_edit.html.twig', array(
+            'form' => $form->createView(),
+            'id' => $id
         ));
     }
 }
