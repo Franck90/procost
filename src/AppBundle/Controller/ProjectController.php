@@ -33,6 +33,10 @@ class ProjectController extends Controller
             10
         );
 
+        if(!$projects){
+            throw $this->createNotFoundException();
+        }
+
         return $this->render('project/project.html.twig', array(
                 "projects" => $projects)
         );
@@ -50,9 +54,12 @@ class ProjectController extends Controller
 
         if ($form->isSubmitted() && $form->isValid())
         {
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($project);
             $em->flush();
+
+            $this->get('session')->getFlashBag()->add('confirmation', "Projet ajouté avec succès");
 
             return $this->redirectToRoute('project');
         }
@@ -67,9 +74,11 @@ class ProjectController extends Controller
      */
     public function projectEditAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $projectToUpdate = $this->getDoctrine()->getRepository('AppBundle:Project')->findOneById($id);
+
+        if(!$projectToUpdate){
+            throw $this->createNotFoundException();
+        }
 
         $form = $this->createForm(ProjectType::class, $projectToUpdate);
 
@@ -80,6 +89,8 @@ class ProjectController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($projectToUpdate);
             $em->flush();
+
+            $this->get('session')->getFlashBag()->add('confirmation', "Edition du projet réalisé avec succès");
 
             return $this->redirectToRoute('project');
         }
@@ -99,8 +110,14 @@ class ProjectController extends Controller
 
         $projectToDelete = $this->getDoctrine()->getRepository('AppBundle:Project')->findOneById($id);
 
+        if(!$projectToDelete){
+            throw $this->createNotFoundException();
+        }
+
         $em->remove($projectToDelete);
         $em->flush();
+
+        $this->get('session')->getFlashBag()->add('confirmation', "Suppression du projet réalisé avec succès");
 
         return $this->redirectToRoute('project');
     }
@@ -113,11 +130,20 @@ class ProjectController extends Controller
         $em = $this->getDoctrine()->getManager();
         $project = $em->getRepository('AppBundle:Project')->find($id);
 
+        if(!$project){
+            throw $this->createNotFoundException();
+        }
+
         $detailList = $this->get('knp_paginator')->paginate(
             $em->getRepository('AppBundle:Detail')->findBy(array('project' => $project->getId()), array('date' => 'desc')),
             $request->query->get('page', 1),
             10
         );
+
+        if(!$detailList)
+        {
+            throw $this->createNotFoundException();
+        }
 
         $detail = new Detail();
         $detail->setProject($project);
@@ -129,6 +155,8 @@ class ProjectController extends Controller
             $em->persist($detail);
             $em->flush();
 
+            $this->get('session')->getFlashBag()->add('confirmation', "Succès de l'ajout de temps sur le projet");
+
             return $this->redirectToRoute("project_detail", array(
                 'id' => $id
             ));
@@ -136,6 +164,12 @@ class ProjectController extends Controller
 
         $employeesOnProject = array();
         $employees = $em->getRepository('AppBundle:Employee')->findAll();
+
+        if($employees)
+        {
+            throw $this->createNotFoundException();
+        }
+
         $employeesIdOnProject = $em->getRepository('AppBundle:Detail')->findBy(array('project' => $id));
 
         foreach ($employeesIdOnProject as $employeeIdOnProject){
@@ -174,21 +208,43 @@ class ProjectController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $detail = $em->getRepository('AppBundle:Detail')->find($idDetail);
+
+        if($detail)
+        {
+            throw $this->createNotFoundException();
+        }
+
+        if($detail->getProject()->getSend() == true || $detail->getEmployee()->getActive() == false)
+        {
+            $this->get('session')->getFlashBag()->add('error', "Suppression impossible, le projet est livré ou l'employé est archivé");
+
+            return $this->redirectToRoute('project_detail', array(
+                "id" => $id)
+            );
+        }
+
         $em->remove($detail);
         $em->flush();
 
+        $this->get('session')->getFlashBag()->add('confirmation', "Succès de la supression de temps sur le projet");
 
-        return $this->projectDetailAction($request, $id);
+        return $this->redirectToRoute('project_detail', array(
+                "id" => $id)
+        );
     }
 
     /**
      * @Route("/project/{id}/send/", name="project_send", requirements = {"id"="\d+"})
      */
-    public function employeeActivateAction(Request $request, $id)
+    public function projectSendAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
         $projectToActivate = $this->getDoctrine()->getRepository('AppBundle:Project')->findOneById($id);
+
+        if(!$projectToActivate){
+            throw $this->createNotFoundException();
+        }
 
         if($projectToActivate->getSend() == true){
             $projectToActivate->setSend(false);
@@ -198,6 +254,12 @@ class ProjectController extends Controller
 
         $em->persist($projectToActivate);
         $em->flush();
+
+        if($projectToActivate->getSend() == true){
+            $this->get('session')->getFlashBag()->add('confirmation', "Projet définit comme étant livré ");
+        }else{
+            $this->get('session')->getFlashBag()->add('error', "Projet définit comme étant en développement ");
+        }
 
         return $this->redirectToRoute('project');
     }

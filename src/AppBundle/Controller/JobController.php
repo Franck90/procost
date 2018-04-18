@@ -26,6 +26,10 @@ class JobController extends Controller
             10
         );
 
+        if(!$jobs){
+            throw $this->createNotFoundException();
+        }
+
         return $this->render('job/job.html.twig', array(
             "jobs" => $jobs)
         );
@@ -47,6 +51,8 @@ class JobController extends Controller
             $em->persist($job);
             $em->flush();
 
+            $this->get('session')->getFlashBag()->add('confirmation', "Métier ajouté avec succès");
+
             return $this->redirectToRoute('job');
         }
 
@@ -60,9 +66,11 @@ class JobController extends Controller
      */
     public function jobEditAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $jobToUpdate = $this->getDoctrine()->getRepository('AppBundle:Job')->findOneById($id);
+
+        if(!$jobToUpdate){
+            throw $this->createNotFoundException();
+        }
 
         $form = $this->createForm(JobType::class, $jobToUpdate);
 
@@ -73,6 +81,8 @@ class JobController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($jobToUpdate);
             $em->flush();
+
+            $this->get('session')->getFlashBag()->add('confirmation', "Métier édité avec succès");
 
             return $this->redirectToRoute('job');
         }
@@ -93,12 +103,18 @@ class JobController extends Controller
 
             $jobToDelete = $this->getDoctrine()->getRepository('AppBundle:Job')->findOneById($id);
 
+            if(!$jobToDelete){
+                throw $this->createNotFoundException();
+            }
+
             $em->remove($jobToDelete);
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('confirmation', "Le métier a bien été supprimé");
             return $this->redirectToRoute('job');
+
         } catch (ForeignKeyConstraintViolationException $e) {
+
             $this->get('session')->getFlashBag()->add('error', "Le métier appartient à un employer, suppression impossible");
             return $this->redirectToRoute('job');
         }

@@ -70,13 +70,7 @@ class Employee
     private $job;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Project", inversedBy="employee")
-     * @ORM\JoinTable(name="employee_project")
-     */
-    private $project;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Detail", mappedBy="employee")
+     * @ORM\OneToMany(targetEntity="Detail", mappedBy="employee", cascade={"remove"})
      */
     private $detail;
 

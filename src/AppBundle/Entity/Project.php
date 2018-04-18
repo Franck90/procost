@@ -57,15 +57,9 @@ class Project
     private $send;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Employee", mappedBy="project")
-     */
-    private $employee;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Detail", mappedBy="project")
+     * @ORM\OneToMany(targetEntity="Detail", mappedBy="project", cascade={"remove"})
      */
     private $detail;
-
 
     /**
      * Get id
