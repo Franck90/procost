@@ -27,6 +27,10 @@ class EmployeeController extends Controller
             10
         );
 
+        if(!$employees){
+            throw $this->createNotFoundException();
+        }
+
         return $this->render('employee/employee.html.twig', array(
                 "employees" => $employees)
         );
@@ -48,6 +52,8 @@ class EmployeeController extends Controller
             $em->persist($employee);
             $em->flush();
 
+            $this->get('session')->getFlashBag()->add('confirmation', "Employé ajouté avec succès");
+
             return $this->redirectToRoute('employee');
         }
 
@@ -61,9 +67,11 @@ class EmployeeController extends Controller
      */
     public function employeeEditAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $employeeToUpdate = $this->getDoctrine()->getRepository('AppBundle:Employee')->findOneById($id);
+
+        if(!$employeeToUpdate){
+            throw $this->createNotFoundException();
+        }
 
         $form = $this->createForm(EmployeeType::class, $employeeToUpdate);
 
@@ -74,6 +82,8 @@ class EmployeeController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($employeeToUpdate);
             $em->flush();
+
+            $this->get('session')->getFlashBag()->add('confirmation', "Edition de l'employé réalisé avec succès");
 
             return $this->redirectToRoute('employee');
         }
@@ -93,10 +103,16 @@ class EmployeeController extends Controller
 
         $employeeToDesactivate = $this->getDoctrine()->getRepository('AppBundle:Employee')->findOneById($id);
 
+        if(!$employeeToDesactivate){
+            throw $this->createNotFoundException();
+        }
+
         $employeeToDesactivate->setActive(false);
 
         $em->persist($employeeToDesactivate);
         $em->flush();
+
+        $this->get('session')->getFlashBag()->add('confirmation', "Employé archivé avec succès");
 
         return $this->redirectToRoute('employee');
     }
@@ -110,10 +126,16 @@ class EmployeeController extends Controller
 
         $employeeToActivate = $this->getDoctrine()->getRepository('AppBundle:Employee')->findOneById($id);
 
+        if(!$employeeToActivate){
+            throw $this->createNotFoundException();
+        }
+
         $employeeToActivate->setActive(true);
 
         $em->persist($employeeToActivate);
         $em->flush();
+
+        $this->get('session')->getFlashBag()->add('confirmation', "Employé activé avec succès");
 
         return $this->redirectToRoute('employee');
     }
@@ -126,12 +148,20 @@ class EmployeeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $employee = $em->getRepository('AppBundle:Employee')->find($id);
 
+        if(!$employee){
+            throw $this->createNotFoundException();
+        }
+
         $detailList = $this->get('knp_paginator')->paginate(
 
             $em->getRepository('AppBundle:Detail')->findBy(array('employee' => $employee->getId()), array('date' => 'desc')),
                 $request->query->get('page', 1),
                 10
         );
+
+        if(!$detailList){
+            throw $this->createNotFoundException();
+        }
 
         $detail = new Detail();
         $detail->setEmployee($employee);
@@ -142,6 +172,8 @@ class EmployeeController extends Controller
         if($form->isSubmitted() && $form->isValid()){
             $em->persist($detail);
             $em->flush();
+
+            $this->get('session')->getFlashBag()->add('confirmation', "Temps de travail ajouté avec succès");
 
             return $this->redirectToRoute("employee_detail", array(
                 'id' => $id
@@ -159,6 +191,7 @@ class EmployeeController extends Controller
      * @Route("employee/{id}/detail/activate", name="employee_detail_activate", requirements= {"id"="\d+"})
      */
     public function employeeDetailActivateAction(Request $request, $id){
+
         $em = $this->getDoctrine()->getManager();
         $employee = $em->getRepository('AppBundle:Employee')->find($id);
         $employee->setActive(true);
@@ -170,6 +203,10 @@ class EmployeeController extends Controller
             10
         );
 
+        if(!$detailList){
+            throw $this->createNotFoundException();
+        }
+
         $detail = new Detail();
         $detail->setEmployee($employee);
 
@@ -179,6 +216,8 @@ class EmployeeController extends Controller
         if($form->isSubmitted() && $form->isValid()){
             $em->persist($detail);
             $em->flush();
+
+            $this->get('session')->getFlashBag()->add('confirmation', "Temps de travail ajouté avec succès");
 
             return $this->redirectToRoute("employee_detail", array(
                 'id' => $id
@@ -196,36 +235,16 @@ class EmployeeController extends Controller
      * @Route("employee/{id}/detail/desactivate", name="employee_detail_desactivate", requirements= {"id"="\d+"})
      */
     public function employeeDetailDesactivateAction(Request $request, $id){
+
         $em = $this->getDoctrine()->getManager();
         $employee = $em->getRepository('AppBundle:Employee')->find($id);
         $employee->setActive(false);
 
-        $detailList = $this->get('knp_paginator')->paginate(
+        $em->persist($employee);
+        $em->flush();
 
-            $em->getRepository('AppBundle:Detail')->findBy(array('employee' => $employee->getId()), array('date' => 'desc')),
-            $request->query->get('page', 1),
-            10
-        );
-
-        $detail = new Detail();
-        $detail->setEmployee($employee);
-
-        $form = $this->createForm(DetailEmployeeType::class, $detail);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()){
-            $em->persist($detail);
-            $em->flush();
-
-            return $this->render("employee_detail", array(
-                'id' => $id
-            ));
-        }
-
-        return $this->render('employee/employee_detail.html.twig', array(
-            'employee' => $employee,
-            'detailList' => $detailList,
-            'form' => $form->createView()
+        return $this->redirectToRoute('employee_detail', array(
+            "id" => $id
         ));
     }
 
@@ -239,7 +258,8 @@ class EmployeeController extends Controller
         $em->remove($detail);
         $em->flush();
 
-
-        return $this->employeeDetailAction($request, $id);
+        return $this->redirectToRoute('employee_detail', array(
+            "id" => $id
+        ));
     }
 }

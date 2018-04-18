@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="807c6cd7-530d-4d15-b5da-35cd03919d49" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/project/project.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/project/project.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Resources/views/project/project_detail.html.twig" afterPath="$PROJECT_DIR$/app/Resources/views/project/project_detail.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Controller/JobController.php" afterPath="$PROJECT_DIR$/src/AppBundle/Controller/JobController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Controller/ProjectController.php" afterPath="$PROJECT_DIR$/src/AppBundle/Controller/ProjectController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Entity/Employee.php" afterPath="$PROJECT_DIR$/src/AppBundle/Entity/Employee.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Entity/Project.php" afterPath="$PROJECT_DIR$/src/AppBundle/Entity/Project.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AppBundle/Controller/EmployeeController.php" afterPath="$PROJECT_DIR$/src/AppBundle/Controller/EmployeeController.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,8 +16,8 @@
       <file leaf-file-name="ProjectController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/ProjectController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="40" column="40" lean-forward="true" selection-start-line="40" selection-start-column="40" selection-end-line="40" selection-end-column="40" />
+            <state relative-caret-position="694">
+              <caret line="92" column="0" lean-forward="false" selection-start-line="92" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
               <folding>
                 <element signature="e#123#151#0#PHP" expanded="true" />
               </folding>
@@ -34,9 +28,11 @@
       <file leaf-file-name="EmployeeController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/EmployeeController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="57" lean-forward="true" selection-start-line="9" selection-start-column="57" selection-end-line="9" selection-end-column="57" />
-              <folding />
+            <state relative-caret-position="510">
+              <caret line="243" column="21" lean-forward="true" selection-start-line="243" selection-start-column="21" selection-end-line="243" selection-end-column="21" />
+              <folding>
+                <element signature="e#40#68#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -101,7 +97,6 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Form/DetailType.php" />
         <option value="$PROJECT_DIR$/app/Resources/views/employee/employee.html.twig" />
         <option value="$PROJECT_DIR$/src/AppBundle/Repository/ProjectRepository.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Controller/EmployeeController.php" />
         <option value="$PROJECT_DIR$/app/Resources/views/employee/employee_detail.html.twig" />
         <option value="$PROJECT_DIR$/src/AppBundle/Form/EmployeeType.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Form/ProjectType.php" />
@@ -116,6 +111,7 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Entity/Employee.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Controller/ProjectController.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Controller/JobController.php" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Controller/EmployeeController.php" />
       </list>
     </option>
   </component>
@@ -318,12 +314,12 @@
       <workItem from="1523895843241" duration="13412000" />
       <workItem from="1523945212833" duration="27146000" />
       <workItem from="1524042291192" duration="331000" />
-      <workItem from="1524061089666" duration="7681000" />
+      <workItem from="1524061089666" duration="8863000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="93056000" />
+    <option name="totallyTimeSpent" value="94238000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1872" height="1096" extended-state="6" />
@@ -428,8 +424,33 @@
           <line>66</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/AppBundle/Controller/EmployeeController.php</url>
+          <line>41</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/AppBundle/Controller/EmployeeController.php</url>
+          <line>18</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/AppBundle/Controller/EmployeeController.php</url>
+          <line>67</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/AppBundle/Controller/EmployeeController.php</url>
+          <line>122</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/AppBundle/Controller/EmployeeController.php</url>
+          <line>99</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="12" />
+      <option name="time" value="17" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -701,7 +722,7 @@
         <state relative-caret-position="391">
           <caret line="31" column="24" lean-forward="false" selection-start-line="31" selection-start-column="24" selection-end-line="31" selection-end-column="24" />
           <folding>
-            <element signature="e#34#62#0#PHP" expanded="true" />
+            <element signature="e#34#62#0#PHP" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -812,8 +833,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/ProjectController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="40" column="40" lean-forward="true" selection-start-line="40" selection-start-column="40" selection-end-line="40" selection-end-column="40" />
+        <state relative-caret-position="694">
+          <caret line="92" column="0" lean-forward="false" selection-start-line="92" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
           <folding>
             <element signature="e#123#151#0#PHP" expanded="true" />
           </folding>
@@ -822,9 +843,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Controller/EmployeeController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="57" lean-forward="true" selection-start-line="9" selection-start-column="57" selection-end-line="9" selection-end-column="57" />
-          <folding />
+        <state relative-caret-position="510">
+          <caret line="243" column="21" lean-forward="true" selection-start-line="243" selection-start-column="21" selection-end-line="243" selection-end-column="21" />
+          <folding>
+            <element signature="e#40#68#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
