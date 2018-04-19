@@ -3,9 +3,12 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Job;
+use AppBundle\Entity\Project;
 use AppBundle\Form\JobType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -30,9 +33,27 @@ class JobController extends Controller
             throw $this->createNotFoundException();
         }
 
-        return $this->render('job/job.html.twig', array(
-            "jobs" => $jobs)
-        );
+        $searchForm = $this->createFormBuilder()
+            ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->getForm();
+
+        $searchForm->handleRequest($request);
+
+        if($searchForm->isSubmitted() && $searchForm->isValid()){
+
+            $word = $searchForm->getData()['word'];
+
+            $em = $this->getDoctrine()->getManager();
+            $projectsSearched = $em->getRepository(Project::class)->search($word);
+
+            return $this->render('project/project.html.twig', array(
+                'projects' => $projectsSearched,
+                'fromSearch' => 'Resultat de recherche'));
+        }
+
+        return $this->render('job/job.html.twig', array('jobs' => $jobs,
+            'searchForm' => $searchForm->createView()));
     }
 
     /**
@@ -56,8 +77,28 @@ class JobController extends Controller
             return $this->redirectToRoute('job');
         }
 
+        $searchForm = $this->createFormBuilder()
+            ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->getForm();
+
+        $searchForm->handleRequest($request);
+
+        if($searchForm->isSubmitted() && $searchForm->isValid()){
+
+            $word = $searchForm->getData()['word'];
+
+            $em = $this->getDoctrine()->getManager();
+            $projectsSearched = $em->getRepository(Project::class)->search($word);
+
+            return $this->render('project/project.html.twig', array(
+                'projects' => $projectsSearched,
+                'fromSearch' => 'Resultat de recherche'));
+        }
+
         return $this->render('job/job_new.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'searchForm' => $searchForm->createView(),
         ));
     }
 
@@ -87,9 +128,29 @@ class JobController extends Controller
             return $this->redirectToRoute('job');
         }
 
+        $searchForm = $this->createFormBuilder()
+            ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->getForm();
+
+        $searchForm->handleRequest($request);
+
+        if($searchForm->isSubmitted() && $searchForm->isValid()){
+
+            $word = $searchForm->getData()['word'];
+
+            $em = $this->getDoctrine()->getManager();
+            $projectsSearched = $em->getRepository(Project::class)->search($word);
+
+            return $this->render('project/project.html.twig', array(
+                'projects' => $projectsSearched,
+                'fromSearch' => 'Resultat de recherche'));
+        }
+
         return $this->render('job/job_edit.html.twig', array(
             'form' => $form->createView(),
-            'id' => $id
+            'id' => $id,
+            'searchForm' => $searchForm->createView(),
         ));
     }
 

@@ -46,18 +46,20 @@
                 <a href="{{ path('dashboard') }}" class="logo">
                     <b>PROCOST</b>
                 </a>
+
                 <!--logo end-->
-                <div class="search-engine">
-                    <div class="pull-right">
-                        <form class="form-inline">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Recherche">
+                {% if searchForm is defined %}
+                    <div class="search-engine">
+                        <div class="search-engine">
+                            <div>
+                                {{ form(searchForm) }}
                             </div>
-                            <button type="button" class="btn btn-theme">OK</button>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                {%  endif %}
+
             </header>
+
             <!--header end-->
 
             <!-- **********************************************************************************************************************************************************

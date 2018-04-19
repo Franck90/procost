@@ -10,4 +10,12 @@ namespace AppBundle\Repository;
  */
 class ProjectRepository extends \Doctrine\ORM\EntityRepository
 {
+    function search($word)
+    {
+        $query = $this->createQueryBuilder('u');
+
+        return $query->where($query->expr()->like('u.name', ':name'))
+            ->setParameter('name', '%'.$word.'%')
+            ->getQuery()->getResult();
+    }
 }

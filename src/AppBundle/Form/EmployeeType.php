@@ -35,6 +35,7 @@ class EmployeeType extends AbstractType
             'label' => 'Date d\'embauche',
             'widget' => 'single_text',
         ));
+        $builder->add('url', TextType::class, array('label' => 'Image (url)'));
         $builder->add('active', CheckboxType::class, array(
             'label'    => 'Actif',
             'required' => false

@@ -25,8 +25,8 @@
                 <table class="table table-bordered table-striped table-condensed">
                     <thead>
                         <tr>
-                            <th>Dénomination</th>
-                            <th>Actions</th>
+                            <th class="text-center">Dénomination</th>
+                            <th class="text-center">Actions</th>
                         </tr>
                     </thead>
 
@@ -35,8 +35,8 @@
                         {% if jobs is defined %}
                             {% for job in jobs %}
                                 <tr>
-                                    <th>{{ job.name }}</th>
-                                    <th>
+                                    <th class="text-center">{{ job.name }}</th>
+                                    <th class="text-center">
                                         <a href="{{ path('job_edit', {'id' : job.id}) }}" class="btn btn-primary btn-xs">
                                             <i class="fa fa-pencil"></i>
                                         </a>

@@ -16,76 +16,83 @@
 {% block body %}
     <section class="wrapper">
 
-        <h3><i class="fa fa-angle-right"></i> Gestion des projets</h3>
+        {% if fromSearch is defined %}
+            <h3><i class="fa fa-angle-right"></i> {{ fromSearch }}</h3>
+        {% else %}
+            <h3><i class="fa fa-angle-right"></i> Gestion des projets</h3>
+        {% endif %}
+
         <a class="btn btn-success btn-sm pull-right" href="{{ path('project_new') }}">Ajouter un projet</a>
 
         <div class="row">
             <div class="col-lg-12 main-chart">
                 <table class="table table-bordered table-striped table-condensed">
                     <thead>
-                    <tr>
-                        <th>Intitulé</th>
-                        <th>Description</th>
-                        <th>Type</th>
-                        <th>Date de création</th>
-                        <th>Livré</th>
-                        <th>Actions</th>
-                    </tr>
+                        <tr>
+                            <th class="text-center">Intitulé</th>
+                            <th class="text-center">Description</th>
+                            <th class="text-center">Type</th>
+                            <th class="text-center">Date de création</th>
+                            <th class="text-center">Livré</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {% if projects is defined %}
-                        {% for project in projects %}
-                            <tr>
-                                <th>
-                                    {{ project.name }}
-                                </th>
-                                <th>
-                                    {{ project.description }}
-                                </th>
-                                <th>
-                                    {{ project.type }}
-                                </th>
-                                <th>
-                                    {{ project.date | date('d/m/Y') }}
-                                </th>
-                                <th>
-                                    {% if project.send %}
-                                        Oui
-                                    {% else %}
-                                        Non
-                                    {% endif %}
-                                </th>
+                        {% if projects is defined %}
+                            {% for project in projects %}
+                                <tr>
+                                    <th class="text-center">
+                                        {{ project.name }}
+                                    </th>
+                                    <th class="text-center">
+                                        {{ project.description }}
+                                    </th>
+                                    <th class="text-center">
+                                        {{ project.type }}
+                                    </th>
+                                    <th class="text-center">
+                                        {{ project.date | date('d/m/Y') }}
+                                    </th>
+                                    <th class="text-center">
+                                        {% if project.send %}
+                                            <span class="label label-success label-mini">OUI</span>
+                                        {% else %}
+                                            <span class="label label-danger label-mini">NON</span>
+                                        {% endif %}
+                                    </th>
 
-                                <th>
-                                    <a href="{{ path('project_detail', {'id' : project.id}) }}" class="btn btn-success btn-xs">
-                                        <i class="fa fa-clock-o"></i>
-                                    </a>
+                                    <th class="text-center">
+                                        <a href="{{ path('project_detail', {'id' : project.id}) }}" class="btn btn-success btn-xs">
+                                            <i class="fa fa-clock-o"></i>
+                                        </a>
 
-                                    {% if project.send %}
-                                        <a href="{{ path('project_send', {'id' : project.id}) }}" class="btn btn-default btn-xs">
-                                            <i class="fa fa-arrow-down"></i>
-                                        </a>
-                                    {% else %}
-                                        <a href="{{ path('project_edit', {'id' : project.id}) }}" class="btn btn-primary btn-xs">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                        <a href="{{ path('project_send', {'id' : project.id}) }}" class="btn btn-default btn-xs">
-                                            <i class="fa fa-arrow-up"></i>
-                                        </a>
-                                        <a href="{{ path('project_delete', {'id' : project.id}) }}" class="btn btn-danger btn-xs" onclick="return confirm('Etes-vous sûr de vouloir supprimer ce projet ?')">
-                                            <i class="fa fa-trash-o"></i>
-                                        </a>
-                                    {% endif %}
-                                </th>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
+                                        {% if project.send %}
+                                            <a href="{{ path('project_send', {'id' : project.id}) }}" class="btn btn-default btn-xs">
+                                                <i class="fa fa-arrow-down"></i>
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ path('project_edit', {'id' : project.id}) }}" class="btn btn-primary btn-xs">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <a href="{{ path('project_send', {'id' : project.id}) }}" class="btn btn-default btn-xs">
+                                                <i class="fa fa-arrow-up"></i>
+                                            </a>
+                                            <a href="{{ path('project_delete', {'id' : project.id}) }}" class="btn btn-danger btn-xs" onclick="return confirm('Etes-vous sûr de vouloir supprimer ce projet ?')">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        {% endif %}
+                                    </th>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
             <div class="col-sm-6 col-md-offset-5">
                 <div class="pagination">
-                    <div class="text-center">{{ knp_pagination_render(projects) }}</div>
+                    {% if fromSearch is not defined %}
+                        <div class="text-center">{{ knp_pagination_render(projects) }}</div>
+                    {% endif %}
                 </div>
             </div>
 

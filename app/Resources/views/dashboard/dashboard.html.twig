@@ -122,8 +122,8 @@
                             </div>
                             {% if topEmployee is defined %}
 
-                                <p>
-                                    <img src="assets/img/ui-zac.jpg" class="img-circle" width="80">
+                                <p>{#https://randomuser.me/api/portraits/women/xx.jpg#}
+                                    <img src="{{ topEmployee.url }}" class="img-circle" width="80">
                                 </p>
                                 <p>
                                     <b>{{ topEmployee.Name }} {{ topEmployee.Surname }}</b>
@@ -153,24 +153,24 @@
                         <table class="table table-bordered table-striped table-condensed">
                             <thead>
                             <tr>
-                                <th>Projet</th>
-                                <th>Type</th>
-                                <th>Date</th>
-                                <th>Coût</th>
-                                <th>Livré ?</th>
+                                <th class="text-center">Projet</th>
+                                <th class="text-center">Type</th>
+                                <th class="text-center">Date</th>
+                                <th class="text-center">Coût</th>
+                                <th class="text-center">Livré ?</th>
                             </tr>
                             </thead>
                             <tbody>
                                 {% if lastProjects is defined %}
                                     {%  for project in lastProjects %}
                                         <tr>
-                                            <th>
+                                            <th class="text-center">
                                                 <a href="{{ path('project_detail', {'id' : project.id}) }}">{{ project.name }}</a>
                                             </th>
-                                            <th>{{ project.type }}</th>
-                                            <th>{{ project.date | date('d/m/Y') }}</th>
-                                            <th>{{ project.cost }} €</th>
-                                            <th>
+                                            <th class="text-center">{{ project.type }}</th>
+                                            <th class="text-center">{{ project.date | date('d/m/Y') }}</th>
+                                            <th class="text-center">{{ project.cost }} €</th>
+                                            <th class="text-center">
                                                 {% if project.send %}
                                                     <span class="label label-success label-mini">OUI</span>
                                                 {% else %}
@@ -205,10 +205,13 @@
                             </div>
                             <div class="details">
                                 <p>
-                                    <a href="#">{{ detail.employee.name }} {{ detail.employee.surname }}</a> a travaillé sur
-                                    <a href="#">{{ detail.project.name }}</a>.
+                                    <a href="{{ path('employee_detail', {'id' : detail.employee.id }) }}">{{ detail.employee.name }} {{ detail.employee.surname }}</a> a travaillé sur <a href="{{ path('project_detail', {'id' : detail.project.id }) }}">{{ detail.project.name }}</a>
                                     <br/>
-                                    <muted>{{ detail.duration }} JOURS</muted>
+                                    {% if detail.duration == 1 %}
+                                        durant 1 jour
+                                    {% else %}
+                                        durant {{ detail.duration }} jours
+                                    {% endif %}
                                 </p>
                             </div>
                         </div>

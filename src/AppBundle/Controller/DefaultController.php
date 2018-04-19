@@ -2,9 +2,16 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Project;
+use AppBundle\Form\SearchType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManager;
+
+
 
 class DefaultController extends Controller
 {
@@ -87,18 +94,6 @@ class DefaultController extends Controller
             $duration += $detail->getDuration();
         }
 
-        $lastDetails = array();
-        for( $i = 0 ; $i < 10 ; $i++)
-        {
-            $lastDetail = array_pop($details);
-
-            if($lastDetail == null)
-            {
-                break;
-            }
-            array_push($lastDetails, $lastDetail);
-        }
-
         $topEmployee = 0;
         $statEmployee = array();
 
@@ -123,6 +118,37 @@ class DefaultController extends Controller
             }
         }
 
+        $lastDetails = array();
+        for( $i = 0 ; $i < 10 ; $i++)
+        {
+            $lastDetail = array_pop($details);
+
+            if($lastDetail == null)
+            {
+                break;
+            }
+            array_push($lastDetails, $lastDetail);
+        }
+
+        $searchForm = $this->createFormBuilder()
+            ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->getForm();
+
+        $searchForm->handleRequest($request);
+
+        if($searchForm->isSubmitted() && $searchForm->isValid()){
+
+            $word = $searchForm->getData()['word'];
+
+            $em = $this->getDoctrine()->getManager();
+            $projectsSearched = $em->getRepository(Project::class)->search($word);
+
+            return $this->render('project/project.html.twig', array(
+                'projects' => $projectsSearched,
+                'fromSearch' => 'Resultat de recherche'));
+        }
+
         return $this->render('dashboard/dashboard.html.twig', array(
             'totalProjects' => $totalProjects,
             'totalSend' => $totalSend,
@@ -135,8 +161,19 @@ class DefaultController extends Controller
             'topEmployee' => $topEmployee,
             'topCostEmployee' => max($statEmployee),
             'lastProjects' => $lastProjects,
-            'lastDetails' => $lastDetails
+            'lastDetails' => $lastDetails,
+            'searchForm' => $searchForm->createView()
         ));
+    }
+
+    /**
+     * @Route("/search/{word}", name="search")
+     */
+    public function searchAction(Request $request, $word)
+    {
+        dump($word);
+        die;
+        return $this->redirectToRoute("dashboard");
     }
 
 }

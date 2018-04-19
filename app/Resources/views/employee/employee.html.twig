@@ -24,12 +24,12 @@
                 <table class="table table-bordered table-striped table-condensed">
                     <thead>
                     <tr>
-                        <th>Dénomination</th>
-                        <th>Email</th>
-                        <th>Métier</th>
-                        <th>Coût (jour)</th>
-                        <th>Embauche</th>
-                        <th>Actions</th>
+                        <th class="text-center">Dénomination</th>
+                        <th class="text-center" >Email</th>
+                        <th class="text-center" >Métier</th>
+                        <th class="text-center" >Coût (jour)</th>
+                        <th class="text-center" >Embauche</th>
+                        <th class="text-center" >Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -37,20 +37,20 @@
                             {% for employee in employees %}
                                 <tr>
                                     {% if employee.active %}
-                                        <th>{{ employee.name ~ " " ~ employee.surname }}</th>
-                                        <th>{{ employee.mail }}</th>
-                                        <th>{{ employee.job.name }}</th>
-                                        <th>{{ employee.cost }}</th>
-                                        <th>{{ employee.date |date('d/m/Y') }}</th>
+                                        <th class="text-center" >{{ employee.name ~ " " ~ employee.surname }}</th>
+                                        <th class="text-center">{{ employee.mail }}</th>
+                                        <th class="text-center">{{ employee.job.name }}</th>
+                                        <th class="text-center">{{ employee.cost }}</th>
+                                        <th class="text-center">{{ employee.date |date('d/m/Y') }}</th>
                                     {%  else %}
-                                        <th><strike>{{ employee.name ~ " " ~ employee.surname }}</strike></th>
-                                        <th><strike>{{ employee.mail }}</strike></th>
-                                        <th><strike>{{ employee.job.name }}</strike></th>
-                                        <th><strike>{{ employee.cost }}</strike></th>
-                                        <th><strike>{{ employee.date |date('d/m/Y') }}</strike></th>
+                                        <th class="text-center"><strike>{{ employee.name ~ " " ~ employee.surname }}</strike></th>
+                                        <th class="text-center"><strike>{{ employee.mail }}</strike></th>
+                                        <th class="text-center"><strike>{{ employee.job.name }}</strike></th>
+                                        <th class="text-center"><strike>{{ employee.cost }}</strike></th>
+                                        <th class="text-center"><strike>{{ employee.date |date('d/m/Y') }}</strike></th>
                                     {%  endif %}
 
-                                    <th>
+                                    <th class="text-center">
                                         <a href="{{ path('employee_detail', {'id' : employee.id}) }}" class="btn btn-success btn-xs">
                                             <i class="fa fa-clock-o"></i>
                                         </a>

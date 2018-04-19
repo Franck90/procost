@@ -15,6 +15,8 @@ use AppBundle\Form\DetailType;
 use AppBundle\Form\ProjectType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 
 class ProjectController extends Controller
@@ -28,7 +30,7 @@ class ProjectController extends Controller
 
         $projects = $this->get('knp_paginator')->paginate(
 
-            $em->getRepository('AppBundle:Project')->findAll(),
+            $em->getRepository('AppBundle:Project')->findBy(array(), array("date" => "desc")),
             $request->query->get('page', 1),
             10
         );
@@ -37,8 +39,28 @@ class ProjectController extends Controller
             throw $this->createNotFoundException();
         }
 
+        $searchForm = $this->createFormBuilder()
+            ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->getForm();
+
+        $searchForm->handleRequest($request);
+
+        if($searchForm->isSubmitted() && $searchForm->isValid()){
+
+            $word = $searchForm->getData()['word'];
+
+            $em = $this->getDoctrine()->getManager();
+            $projectsSearched = $em->getRepository(Project::class)->search($word);
+
+            return $this->render('project/project.html.twig', array(
+                'projects' => $projectsSearched,
+                'fromSearch' => 'Resultat de recherche'));
+        }
+
         return $this->render('project/project.html.twig', array(
-                "projects" => $projects)
+                "projects" => $projects,
+                'searchForm' => $searchForm->createView())
         );
     }
 
@@ -64,8 +86,28 @@ class ProjectController extends Controller
             return $this->redirectToRoute('project');
         }
 
+        $searchForm = $this->createFormBuilder()
+            ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->getForm();
+
+        $searchForm->handleRequest($request);
+
+        if($searchForm->isSubmitted() && $searchForm->isValid()){
+
+            $word = $searchForm->getData()['word'];
+
+            $em = $this->getDoctrine()->getManager();
+            $projectsSearched = $em->getRepository(Project::class)->search($word);
+
+            return $this->render('project/project.html.twig', array(
+                'projects' => $projectsSearched,
+                'fromSearch' => 'Resultat de recherche'));
+        }
+
         return $this->render('project/project_new.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'searchForm' => $searchForm->createView()
         ));
     }
 
@@ -102,9 +144,29 @@ class ProjectController extends Controller
             return $this->redirectToRoute('project');
         }
 
+        $searchForm = $this->createFormBuilder()
+            ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->getForm();
+
+        $searchForm->handleRequest($request);
+
+        if($searchForm->isSubmitted() && $searchForm->isValid()){
+
+            $word = $searchForm->getData()['word'];
+
+            $em = $this->getDoctrine()->getManager();
+            $projectsSearched = $em->getRepository(Project::class)->search($word);
+
+            return $this->render('project/project.html.twig', array(
+                'projects' => $projectsSearched,
+                'fromSearch' => 'Resultat de recherche'));
+        }
+
         return $this->render('project/project_edit.html.twig', array(
             'form' => $form->createView(),
-            'id' => $id
+            'id' => $id,
+            'searchForm' => $searchForm->createView()
         ));
     }
 
@@ -216,14 +278,32 @@ class ProjectController extends Controller
 
         $totalEmployee = count(array_unique($arrayEmployee));
 
+        $searchForm = $this->createFormBuilder()
+            ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->getForm();
 
+        $searchForm->handleRequest($request);
+
+        if($searchForm->isSubmitted() && $searchForm->isValid()){
+
+            $word = $searchForm->getData()['word'];
+
+            $em = $this->getDoctrine()->getManager();
+            $projectsSearched = $em->getRepository(Project::class)->search($word);
+
+            return $this->render('project/project.html.twig', array(
+                'projects' => $projectsSearched,
+                'fromSearch' => 'Resultat de recherche'));
+        }
 
         return $this->render('project/project_detail.html.twig', array(
             'project' => $project,
             'detailList' => $detailList,
             'totalEmployee' => $totalEmployee,
             'totalCost' => $totalCost,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'searchForm' => $searchForm->createView()
         ));
     }
 
