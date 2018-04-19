@@ -32,14 +32,14 @@
                         {% endif %}
                     </div>
                     <div class="col-md-2 col-sm-2 box0">
-                        {% if totalProjectsSend is defined %}
+                        {% if totalSend is defined %}
                             <div class="box1">
                                 <span class="li_cloud"></span>
                                 <h3>
-                                    {{ totalProjectsSend }}
+                                    {{ totalSend }}
                                 </h3>
                             </div>
-                            <p>{{ totalProjectsSend }} projets livrés</p>
+                            <p>{{ totalSend }} projets livrés</p>
                         {% endif %}
                     </div>
                     <div class="col-md-2 col-sm-2 box0">
@@ -71,17 +71,21 @@
                             <div class="white-header">
                                 <h5>RENTABILITE</h5>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-6 col-xs-6 goleft">
-                                    <p>
-                                        <i class="fa fa-database"></i> {{ totalCapex }}% CAPEX</p>
-                                </div>
-                            </div>
-                            <canvas id="ratio" height="120" width="120"></canvas>
-                            <script>
-                                var doughnutData = [{ value: {{ totalCapex }}, color: "#68dff0" }, { value: {{ 99 }}, color: "#fdfdfd" }];
-                                var myDoughnut = new Chart(document.getElementById("ratio").getContext("2d")).Doughnut(doughnutData);
-                            </script>
+                            {% if percentCapex is defined %}
+                                {% if percentOpex is defined %}
+                                    <div class="row">
+                                        <div class="col-sm-6 col-xs-6 goleft">
+                                            <p>
+                                                <i class="fa fa-database"></i> {{ percentCapex }}% CAPEX</p>
+                                        </div>
+                                    </div>
+                                    <canvas id="ratio" height="120" width="120"></canvas>
+                                    <script>
+                                        var doughnutData = [{ value: {{ percentCapex }}, color: "#68dff0" }, { value: {{ percentOpex }}, color: "#fdfdfd" }];
+                                        var myDoughnut = new Chart(document.getElementById("ratio").getContext("2d")).Doughnut(doughnutData);
+                                    </script>
+                                {% endif %}
+                            {% endif %}
                         </div>
                         <!--/grey-panel -->
                     </div>
@@ -91,17 +95,21 @@
                             <div class="white-header">
                                 <h5>TAUX DE LIVRAISON</h5>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-6 col-xs-6 goleft">
-                                    <p>
-                                        <i class="fa fa-cloud"></i> 35% LIVRES</p>
-                                </div>
-                            </div>
-                            <canvas id="ratio2" height="120" width="120"></canvas>
-                            <script>
-                                var doughnutData = [{ value: 35, color: "#68dff0" }, { value: 65, color: "#fdfdfd" }];
-                                var myDoughnut = new Chart(document.getElementById("ratio2").getContext("2d")).Doughnut(doughnutData);
-                            </script>
+                            {% if percentSend is defined %}
+                                {% if percentNotSend is defined %}
+                                    <div class="row">
+                                        <div class="col-sm-6 col-xs-6 goleft">
+                                            <p>
+                                                <i class="fa fa-cloud"></i> {{ percentSend }}% LIVRES</p>
+                                        </div>
+                                    </div>
+                                    <canvas id="ratio2" height="120" width="120"></canvas>
+                                    <script>
+                                        var doughnutData = [{ value: {{ percentSend }}, color: "#68dff0" }, { value: {{ percentNotSend }}, color: "#fdfdfd" }];
+                                        var myDoughnut = new Chart(document.getElementById("ratio2").getContext("2d")).Doughnut(doughnutData);
+                                    </script>
+                                {% endif %}
+                            {% endif %}
                         </div>
                         <!--/grey-panel -->
                     </div>
@@ -112,22 +120,27 @@
                             <div class="white-header">
                                 <h5>TOP EMPLOYE</h5>
                             </div>
-                            <p>
-                                <img src="assets/img/ui-zac.jpg" class="img-circle" width="80">
-                            </p>
-                            <p>
-                                <b>Zac Producteur</b>
-                            </p>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <p class="small mt">EMPLOYE DEPUIS</p>
-                                    <p>2012</p>
+                            {% if topEmployee is defined %}
+
+                                <p>
+                                    <img src="assets/img/ui-zac.jpg" class="img-circle" width="80">
+                                </p>
+                                <p>
+                                    <b>{{ topEmployee.Name }} {{ topEmployee.Surname }}</b>
+                                </p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="small mt">EMPLOYE DEPUIS</p>
+                                        <p>{{ topEmployee.getDate | date('d/m/Y') }}</p>
+                                    </div>
+                                    {% if topCostEmployee is defined %}
+                                        <div class="col-md-6">
+                                            <p class="small mt">TOTAL DEPENSE</p>
+                                            <p>{{ topCostEmployee }} €</p>
+                                        </div>
+                                    {% endif %}
                                 </div>
-                                <div class="col-md-6">
-                                    <p class="small mt">TOTAL DEPENSE</p>
-                                    <p>34 567 €</p>
-                                </div>
-                            </div>
+                            {% endif %}
                         </div>
                     </div>
                     <!-- /col-md-4 -->
@@ -148,61 +161,25 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th>
-                                    <a href="#">Mon projet</a>
-                                </th>
-                                <th>CAPEX</th>
-                                <th>18/03/2018</th>
-                                <th>3 200 €</th>
-                                <th>
-                                    <span class="label label-success label-mini">OUI</span>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <a href="#">Mon projet</a>
-                                </th>
-                                <th>CAPEX</th>
-                                <th>18/03/2018</th>
-                                <th>3 200 €</th>
-                                <th>
-                                    <span class="label label-success label-mini">OUI</span>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <a href="#">Mon projet</a>
-                                </th>
-                                <th>CAPEX</th>
-                                <th>18/03/2018</th>
-                                <th>3 200 €</th>
-                                <th>
-                                    <span class="label label-success label-mini">OUI</span>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <a href="#">Mon projet</a>
-                                </th>
-                                <th>CAPEX</th>
-                                <th>18/03/2018</th>
-                                <th>3 200 €</th>
-                                <th>
-                                    <span class="label label-success label-mini">OUI</span>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <a href="#">Mon projet</a>
-                                </th>
-                                <th>OPEX</th>
-                                <th>18/03/2018</th>
-                                <th>3 200 €</th>
-                                <th>
-                                    <span class="label label-danger label-mini">NON</span>
-                                </th>
-                            </tr>
+                                {% if lastProjects is defined %}
+                                    {%  for project in lastProjects %}
+                                        <tr>
+                                            <th>
+                                                <a href="{{ path('project_detail', {'id' : project.id}) }}">{{ project.name }}</a>
+                                            </th>
+                                            <th>{{ project.type }}</th>
+                                            <th>{{ project.date | date('d/m/Y') }}</th>
+                                            <th>{{ project.cost }} €</th>
+                                            <th>
+                                                {% if project.send %}
+                                                    <span class="label label-success label-mini">OUI</span>
+                                                {% else %}
+                                                    <span class="label label-danger label-mini">NON</span>
+                                                {% endif %}
+                                            </th>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
@@ -218,126 +195,25 @@
             <div class="col-lg-3 ds">
                 <h3>TEMPS DE PRODUCTION</h3>
 
-                <div class="desc">
-                    <div class="thumb">
-                        <span class="badge bg-theme">
-                            <i class="fa fa-clock-o"></i>
-                        </span>
-                    </div>
-                    <div class="details">
-                        <p>
-                            <a href="#">James Brown</a> a travaillé sur
-                            <a href="#">Nom du projet</a>.
-                            <br/>
-                            <muted>3 JOURS</muted>
-                        </p>
-                    </div>
-                </div>
-                <div class="desc">
-                    <div class="thumb">
-                        <span class="badge bg-theme">
-                            <i class="fa fa-clock-o"></i>
-                        </span>
-                    </div>
-                    <div class="details">
-                        <p>
-                            <a href="#">James Brown</a> a travaillé sur
-                            <a href="#">Nom du projet</a>.
-                            <br/>
-                            <muted>3 JOURS</muted>
-                        </p>
-                    </div>
-                </div>
-                <div class="desc">
-                    <div class="thumb">
-                        <span class="badge bg-theme">
-                            <i class="fa fa-clock-o"></i>
-                        </span>
-                    </div>
-                    <div class="details">
-                        <p>
-                            <a href="#">James Brown</a> a travaillé sur
-                            <a href="#">Nom du projet</a>.
-                            <br/>
-                            <muted>3 JOURS</muted>
-                        </p>
-                    </div>
-                </div>
-                <div class="desc">
-                    <div class="thumb">
-                        <span class="badge bg-theme">
-                            <i class="fa fa-clock-o"></i>
-                        </span>
-                    </div>
-                    <div class="details">
-                        <p>
-                            <a href="#">James Brown</a> a travaillé sur
-                            <a href="#">Nom du projet</a>.
-                            <br/>
-                            <muted>3 JOURS</muted>
-                        </p>
-                    </div>
-                </div>
-                <div class="desc">
-                    <div class="thumb">
-                        <span class="badge bg-theme">
-                            <i class="fa fa-clock-o"></i>
-                        </span>
-                    </div>
-                    <div class="details">
-                        <p>
-                            <a href="#">James Brown</a> a travaillé sur
-                            <a href="#">Nom du projet</a>.
-                            <br/>
-                            <muted>3 JOURS</muted>
-                        </p>
-                    </div>
-                </div>
-                <div class="desc">
-                    <div class="thumb">
-                        <span class="badge bg-theme">
-                            <i class="fa fa-clock-o"></i>
-                        </span>
-                    </div>
-                    <div class="details">
-                        <p>
-                            <a href="#">James Brown</a> a travaillé sur
-                            <a href="#">Nom du projet</a>.
-                            <br/>
-                            <muted>3 JOURS</muted>
-                        </p>
-                    </div>
-                </div>
-                <div class="desc">
-                    <div class="thumb">
-                        <span class="badge bg-theme">
-                            <i class="fa fa-clock-o"></i>
-                        </span>
-                    </div>
-                    <div class="details">
-                        <p>
-                            <a href="#">James Brown</a> a travaillé sur
-                            <a href="#">Nom du projet</a>.
-                            <br/>
-                            <muted>3 JOURS</muted>
-                        </p>
-                    </div>
-                </div>
-                <div class="desc">
-                    <div class="thumb">
-                        <span class="badge bg-theme">
-                            <i class="fa fa-clock-o"></i>
-                        </span>
-                    </div>
-                    <div class="details">
-                        <p>
-                            <a href="#">James Brown</a> a travaillé sur
-                            <a href="#">Nom du projet</a>.
-                            <br/>
-                            <muted>3 JOURS</muted>
-                        </p>
-                    </div>
-                </div>
+                {% if lastDetails is defined %}
+                    {% for detail in lastDetails %}
+                        <div class="desc">
+                            <div class="thumb">
+                                <span class="badge bg-theme">
+                                    <i class="fa fa-clock-o"></i>
+                                </span>
+                            </div>
+                            <div class="details">
+                                <p>
+                                    <a href="#">{{ detail.employee.name }} {{ detail.employee.surname }}</a> a travaillé sur
+                                    <a href="#">{{ detail.project.name }}</a>.
+                                    <br/>
+                                    <muted>{{ detail.duration }} JOURS</muted>
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
 
             </div>
             <!-- /col-lg-3 -->
