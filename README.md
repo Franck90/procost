@@ -1,77 +1,34 @@
-Symfony Standard Edition
-========================
+# Application Web Procost
 
-**WARNING**: This distribution does not support Symfony 4. See the
-[Installing & Setting up the Symfony Framework][15] page to find a replacement
-that fits you best.
+### Auteur :
+- Nom : Moniez
+- Prénom : Franck
+- Email : franck.moniez90@gmail.com
 
-Welcome to the Symfony Standard Edition - a fully-functional Symfony
-application that you can use as the skeleton for your new applications.
 
-For details on how to download and get started with Symfony, see the
-[Installation][1] chapter of the Symfony Documentation.
 
-What's inside?
---------------
+### Bundle :
+- KnpPaginatorBundle : Utilisé pour la pagination des données
+- Les bundles pour la fonction de recherche m'ont paru plus compliqués à installer/configurer qu'à faire soi-même
 
-The Symfony Standard Edition is configured with the following defaults:
+### Fonctionnalitées implantées :
+Toutes les fonctionnalitées demandées ont été implantées, à savoir entre autres :
+- Edition / suppression / modification des projets, employés et métiers soumises à conditions (projet en production, employé archivé, métier "utilisé", etc). Les contrôleurs testent les objets visés par les routes et redirigent en cas d'erreurs etc...
+- Affichage paginé des informations (détails, listes de projets / employés / métiers)
+- Fonction de recherche (nom de projet) présente sur tout le site, sauf sur la page de résultats
+- Les noms prénoms, noms de projet pointent tous vers le détail concerné
+- Les asserts sur les entity sécurisent le "back"
+- Les fixtures ont été générées en partie aléatoirement (temps de production par exemple)
 
-  * An AppBundle you can use to start coding;
+Quelques éléments ont été ajoutés indépendemment du cahier des charges :
+- Ajout d'une URL d'image dans l'entité Employee, affichage de cette dernière dans le suivi
+- Le footer "colle" au bas de page
+- Les contenus des tableaux HTML ont été centrés par une classe CSS de boostrap (text-center), l'application d'un style CSS conventionnel ne fonctionnait pas correctement ( boucles for en twig et sélecteur css incompatibles ? )
+- L'implantation de la fonction de recherche dans les contrôleurs aurait pu être simplifiée (réécriture de code importante)
 
-  * Twig as the only configured template engine;
+---
 
-  * Doctrine ORM/DBAL;
+## Remarques diverses :
 
-  * Swiftmailer;
-
-  * Annotations enabled for everything.
-
-It comes pre-configured with the following bundles:
-
-  * **FrameworkBundle** - The core Symfony framework bundle
-
-  * [**SensioFrameworkExtraBundle**][6] - Adds several enhancements, including
-    template and routing annotation capability
-
-  * [**DoctrineBundle**][7] - Adds support for the Doctrine ORM
-
-  * [**TwigBundle**][8] - Adds support for the Twig templating engine
-
-  * [**SecurityBundle**][9] - Adds security by integrating Symfony's security
-    component
-
-  * [**SwiftmailerBundle**][10] - Adds support for Swiftmailer, a library for
-    sending emails
-
-  * [**MonologBundle**][11] - Adds support for Monolog, a logging library
-
-  * **WebProfilerBundle** (in dev/test env) - Adds profiling functionality and
-    the web debug toolbar
-
-  * **SensioDistributionBundle** (in dev/test env) - Adds functionality for
-    configuring and working with Symfony distributions
-
-  * [**SensioGeneratorBundle**][13] (in dev env) - Adds code generation
-    capabilities
-
-  * [**WebServerBundle**][14] (in dev env) - Adds commands for running applications
-    using the PHP built-in web server
-
-  * **DebugBundle** (in dev/test env) - Adds Debug and VarDumper component
-    integration
-
-All libraries and bundles included in the Symfony Standard Edition are
-released under the MIT or BSD license.
-
-Enjoy!
-
-[1]:  https://symfony.com/doc/3.4/setup.html
-[6]:  https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/index.html
-[7]:  https://symfony.com/doc/3.4/doctrine.html
-[8]:  https://symfony.com/doc/3.4/templating.html
-[9]:  https://symfony.com/doc/3.4/security.html
-[10]: https://symfony.com/doc/3.4/email.html
-[11]: https://symfony.com/doc/3.4/logging.html
-[13]: https://symfony.com/doc/current/bundles/SensioGeneratorBundle/index.html
-[14]: https://symfony.com/doc/current/setup/built_in_web_server.html
-[15]: https://symfony.com/doc/current/setup.html
+- Je vous rends ce projet très en avance car je prends l'avion le dimanche 22 avril pour revenir en France le 5 mai (je n'aurai pas internet durant le séjour). C'est pour cette raison que je n'ai pas eu le temps de factoriser et commenter plus le code-source
+- Je vous joint l'URL de mon dépôt github, dans le cas ou BitBucket ne fonctionnerait pas (repo public) : https://github.com/Franck90/procost
