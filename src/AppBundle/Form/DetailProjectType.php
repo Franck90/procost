@@ -1,4 +1,5 @@
 <?php
+//src/AppBundle/Form/DetailProjectType.php
 
 namespace AppBundle\Form;
 
@@ -10,7 +11,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use AppBundle\Entity\Project;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class DetailProjectType extends AbstractType

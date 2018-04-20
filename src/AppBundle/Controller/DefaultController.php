@@ -1,17 +1,15 @@
 <?php
+//src/AppBundle/Controller/DefaultController.php
 
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Project;
-use AppBundle\Form\SearchType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManager;
-
-
 
 class DefaultController extends Controller
 {
@@ -20,6 +18,7 @@ class DefaultController extends Controller
      */
     public function dashboardAction(Request $request)
     {
+        //Get data
         $projects = $this->getDoctrine()->getRepository('AppBundle:Project')->findBy(array(), array('date' => 'asc'));
         $employees = $this->getDoctrine()->getRepository('AppBundle:Employee')->findAll();
         $details = $this->getDoctrine()->getRepository('AppBundle:Detail')->findBy(array(), array('date' => 'asc'));
@@ -29,7 +28,7 @@ class DefaultController extends Controller
         $totalSend = 0;
         $totalCapex = 0;
 
-
+        //Creating array of projects data for the list template
         $projectsResumee = array();
 
         foreach ($projects as $project){
@@ -61,6 +60,7 @@ class DefaultController extends Controller
             ));
         }
 
+        //10 last projects
         $lastProjects = array();
 
         for( $i = 0 ; $i < 5 ; $i++)
@@ -74,6 +74,7 @@ class DefaultController extends Controller
             array_push($lastProjects, $lastProject);
         }
 
+        //Stats for the template
         $percentSend = 0;
         $percentCapex = 0;
 
@@ -86,7 +87,7 @@ class DefaultController extends Controller
         $percentOpex = 100 - $percentCapex;
         $percentNotSend = 100 - $percentSend;
 
-
+        //Total duration for the template
         $duration = 0;
 
         foreach ($details as $detail)
@@ -94,6 +95,7 @@ class DefaultController extends Controller
             $duration += $detail->getDuration();
         }
 
+        //Searching topEmployee by his nb days worked
         $topEmployee = 0;
         $statEmployee = array();
 
@@ -118,6 +120,7 @@ class DefaultController extends Controller
             }
         }
 
+        //10 last details
         $lastDetails = array();
         for( $i = 0 ; $i < 10 ; $i++)
         {
@@ -130,9 +133,10 @@ class DefaultController extends Controller
             array_push($lastDetails, $lastDetail);
         }
 
+        //Search form
         $searchForm = $this->createFormBuilder()
             ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
-            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px', 'placeholder' => 'Rechercher...')))
             ->getForm();
 
         $searchForm->handleRequest($request);
@@ -149,31 +153,27 @@ class DefaultController extends Controller
                 'fromSearch' => 'Resultat de recherche'));
         }
 
-        return $this->render('dashboard/dashboard.html.twig', array(
-            'totalProjects' => $totalProjects,
-            'totalSend' => $totalSend,
-            'totalEmployees' => count($employees),
-            'duration' => $duration,
-            'percentCapex' => round($percentCapex),
-            'percentOpex' => round($percentOpex),
-            'percentSend' => round($percentSend),
-            'percentNotSend' => round($percentNotSend),
-            'topEmployee' => $topEmployee,
-            'topCostEmployee' => max($statEmployee),
-            'lastProjects' => $lastProjects,
-            'lastDetails' => $lastDetails,
-            'searchForm' => $searchForm->createView()
-        ));
-    }
-
-    /**
-     * @Route("/search/{word}", name="search")
-     */
-    public function searchAction(Request $request, $word)
-    {
-        dump($word);
-        die;
-        return $this->redirectToRoute("dashboard");
+        if( $employees ) {
+            return $this->render('dashboard/dashboard.html.twig', array(
+                'totalProjects' => $totalProjects,
+                'totalSend' => $totalSend,
+                'totalEmployees' => count($employees),
+                'duration' => $duration,
+                'percentCapex' => round($percentCapex),
+                'percentOpex' => round($percentOpex),
+                'percentSend' => round($percentSend),
+                'percentNotSend' => round($percentNotSend),
+                'topEmployee' => $topEmployee,
+                'topCostEmployee' => max($statEmployee),
+                'lastProjects' => $lastProjects,
+                'lastDetails' => $lastDetails,
+                'searchForm' => $searchForm->createView()
+            ));
+        }else{
+            return $this->render('dashboard/dashboard.html.twig', array(
+                'searchForm' => $searchForm->createView()
+            ));
+        }
     }
 
 }

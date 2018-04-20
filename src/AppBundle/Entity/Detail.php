@@ -1,9 +1,11 @@
 <?php
+//src/AppBundle/Entity/Detail.php
 
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Detail
@@ -24,24 +26,31 @@ class Detail
 
     /**
      * @var int
-     *
+     * @Assert\NotBlank()
+     * @Assert\Range(
+     *      min = 1,
+     *      minMessage = "La durée doit être d'au moins 1 jour",
+     * )
      * @ORM\Column(name="duration", type="integer")
      */
     private $duration;
 
     /**
      * @var \DateTime
-     *
+     * @Assert\NotBlank()
+     * @Assert\Date()
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="Employee", inversedBy="detail")
      */
     private $employee;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="Project", inversedBy="detail")
      */
     private $project;

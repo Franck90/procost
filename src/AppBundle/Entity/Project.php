@@ -1,8 +1,10 @@
 <?php
+//src/AppBundle/Entity/Project.php
 
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Project
@@ -23,35 +25,52 @@ class Project
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *  min = 2,
+     *  max = 25,
+     *  minMessage = "Le nom du projet doit faire au moins {{ limit }} caractères",
+     *  maxMessage = "Le nom du projet doit faire au plus {{ limit }} caractères"
+     * )
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *  min = 2,
+     *  max = 50,
+     *  minMessage = "La description du projet doit faire au moins {{ limit }} caractères",
+     *  maxMessage = "La description du projet doit faire au plus {{ limit }} caractères"
+     * )
      * @ORM\Column(name="description", type="string", length=255)
      */
     private $description;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Choice({"OPEX", "CAPEX"}, message="Choisissez OPEX ou CAPEX")
      * @ORM\Column(name="type", type="string", length=255)
      */
     private $type;
 
     /**
      * @var \DateTime
-     *
+     * @Assert\NotBlank()
+     * @Assert\Date()
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
     /**
      * @var boolean
-     *
+     * @Assert\Type(
+     *     type="bool",
+     *     message="La valeur {{ value }} n'est pas un {{ type }}."
+     * )
      * @ORM\Column(name="send", type="boolean", length=255)
      */
     private $send;

@@ -1,3 +1,4 @@
+{# app/Resources/views/employee/employee_detail.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}
@@ -26,59 +27,67 @@
             <div class="col-lg-5">
                 <div class="row">
                     <div class="form-panel">
+
                         <table class="table table-bordered table-striped table-condensed">
                             <tbody>
                                 {% if employee is defined %}
                                     {% if employee.active %}
                                         <tr>
-                                            <th>Prénom</th>
-                                            <td>{{ employee.name }}</td>
+                                            <th class="text-center">Photo</th>
+                                            <td class="text-center"><img src="{{ employee.url }}" class="img-rounded" width="200"></td>
                                         </tr>
                                         <tr>
-                                            <th>Nom</th>
-                                            <td>{{ employee.surname }}</td>
+                                            <th class="text-center">Prénom</th>
+                                            <td class="text-center">{{ employee.name }}</td>
                                         </tr>
                                         <tr>
-                                            <th>Email</th>
-                                            <td>{{ employee.mail }}</td>
+                                            <th class="text-center">Nom</th>
+                                            <td class="text-center">{{ employee.surname }}</td>
                                         </tr>
                                         <tr>
-                                            <th>Métier</th>
-                                            <td>{{ employee.job.name }}</td>
+                                            <th class="text-center">Email</th>
+                                            <td class="text-center">{{ employee.mail }}</td>
                                         </tr>
                                         <tr>
-                                            <th>Coût (jour)</th>
-                                            <td>{{ employee.cost }}</td>
+                                            <th class="text-center">Métier</th>
+                                            <td class="text-center">{{ employee.job.name }}</td>
                                         </tr>
                                         <tr>
-                                            <th>Date d'embauche</th>
-                                            <td>{{ employee.date |date('d/m/Y') }}</td>
+                                            <th class="text-center">Coût (jour)</th>
+                                            <td class="text-center">{{ employee.cost }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center">Date d'embauche</th>
+                                            <td class="text-center">{{ employee.date |date('d/m/Y') }}</td>
                                         </tr>
                                     {% else %}
-
                                         <tr>
-                                            <th>Prénom</th>
-                                            <td><strike>{{ employee.name }}</strike></td>
+                                            <th class="text-center">Photo</th>
+                                            <td class="text-center"><img src="{{ employee.url }}" class="img-rounded" width="200"></td>
                                         </tr>
                                         <tr>
-                                            <th>Nom</th>
-                                            <td><strike>{{ employee.surname }}</strike></td>
+                                            <th class="text-center">Prénom</th>
+                                            <td class="text-center"><strike>{{ employee.name }}</strike></td>
                                         </tr>
                                         <tr>
-                                            <th>Email</th>
-                                            <td><strike>{{ employee.mail }}</strike></td>
+                                            <th class="text-center">Nom</th>
+                                            <td class="text-center"><strike>{{ employee.surname }}</strike></td>
                                         </tr>
                                         <tr>
-                                            <th>Métier</th>
-                                            <td><strike>{{ employee.job.name }}</strike></td>
+                                            <th class="text-center">Email</th>
+                                            <td class="text-center"><strike>{{ employee.mail }}</strike></td>
                                         </tr>
                                         <tr>
-                                            <th>Coût (jour)</th>
-                                            <td><strike>{{ employee.cost }}</strike></td>
+                                            <th class="text-center">Métier</th>
+                                            <td class="text-center"><strike>{{ employee.job.name }}</strike></td>
                                         </tr>
                                         <tr>
-                                            <th>Date d'embauche</th>
-                                            <td><strike>{{ employee.date |date('d/m/Y') }}</strike></td>
+                                            <th class="text-center">Coût (jour)</th>
+                                            <td class="text-center"><strike>{{ employee.cost }}</strike></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center">Date d'embauche</th>
+                                            <td class="text-center"><strike>{{ employee.date |date('d/m/Y') }}</strike></td>
                                         </tr>
                                     {% endif %}
                                 {% endif %}
@@ -111,13 +120,13 @@
                 <table class="table table-bordered table-striped table-condensed">
                     <thead>
                         <tr>
-                            <th>Projet</th>
-                            <th>Temps</th>
-                            <th>Date de saisie</th>
-                            <th>Coût total</th>
+                            <th class="text-center">Projet</th>
+                            <th class="text-center">Temps</th>
+                            <th class="text-center">Date de saisie</th>
+                            <th class="text-center">Coût total</th>
                             {% if employee is defined %}
                                 {% if employee.active %}
-                                    <th>Actions</th>
+                                    <th class="text-center">Actions</th>
                                 {% endif %}
                             {% endif %}
                         </tr>
@@ -127,25 +136,25 @@
                         {% if detailList is defined %}
                             {% for detail in detailList %}
                                 <tr>
-                                    <th>
+                                    <th class="text-center">
                                         <a href="{{ path('project_detail', {'id' : detail.project.id}) }}">{{ detail.project.name }}</a>
                                     </th>
-                                    <th>
+                                    <th class="text-center">
                                         {% if detail.duration == 1 %}
                                             1 jour
                                         {% else %}
                                             {{ detail.duration }} jours
                                         {% endif %}
                                     </th>
-                                    <th>
+                                    <th class="text-center">
                                         {{ detail.date | date('d/m/Y') }}
                                     </th>
-                                    <th>
+                                    <th class="text-center">
                                         {{ detail.employee.cost|number_format * detail.duration|number_format }} €
                                     </th>
                                     {% if employee is defined %}
                                         {% if employee.active %}
-                                            <th>
+                                            <th class="text-center">
                                                 <a href="{{ path('detail_employee_delete', {'id' : employee.id , 'idDetail' : detail.id}) }}" class="btn btn-danger btn-xs">
                                                     <i class="fa fa-trash-o"></i>
                                                 </a>

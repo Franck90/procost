@@ -1,5 +1,14 @@
+{# app/Resources/TwigBundle/views/Exception/error.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block body %}
+{% block title %}
+    PROCOST - Erreur
+{% endblock %}
 
+{% block body %}
+    <section class="wrapper">
+        <h1>Une erreur est survenue !</h1>
+
+        <h3>Retournez à la <a href="{{ path("dashboard") }}">page d'accueil</a> ;)</h3>
+    </section>
 {% endblock %}

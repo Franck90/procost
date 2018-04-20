@@ -1,17 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Franck
- * Date: 15/04/2018
- * Time: 17:17
- */
+//src/AppBundle/Controller/ProjectController.php
 
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Detail;
 use AppBundle\Entity\Project;
 use AppBundle\Form\DetailProjectType;
-use AppBundle\Form\DetailType;
 use AppBundle\Form\ProjectType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -28,6 +22,7 @@ class ProjectController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        //Get All projects and display last 10 by the knp_paginator Bundle
         $projects = $this->get('knp_paginator')->paginate(
 
             $em->getRepository('AppBundle:Project')->findBy(array(), array("date" => "desc")),
@@ -39,9 +34,10 @@ class ProjectController extends Controller
             throw $this->createNotFoundException();
         }
 
+        //searchForm
         $searchForm = $this->createFormBuilder()
             ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
-            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px', 'placeholder' => 'Rechercher...')))
             ->getForm();
 
         $searchForm->handleRequest($request);
@@ -86,9 +82,10 @@ class ProjectController extends Controller
             return $this->redirectToRoute('project');
         }
 
+        //searchForm
         $searchForm = $this->createFormBuilder()
             ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
-            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px', 'placeholder' => 'Rechercher...')))
             ->getForm();
 
         $searchForm->handleRequest($request);
@@ -124,7 +121,7 @@ class ProjectController extends Controller
 
         if($projectToUpdate->getSend())
         {
-            $this->get('session')->getFlashBag()->add('error', "Projet en production, edition de ce dernier impossible");
+            $this->get('session')->getFlashBag()->add('error', "Projet en production, édition de ce dernier impossible");
 
             return $this->redirectToRoute('employee');
         }
@@ -144,9 +141,10 @@ class ProjectController extends Controller
             return $this->redirectToRoute('project');
         }
 
+        //searchForm
         $searchForm = $this->createFormBuilder()
             ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
-            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px', 'placeholder' => 'Rechercher...')))
             ->getForm();
 
         $searchForm->handleRequest($request);
@@ -196,6 +194,7 @@ class ProjectController extends Controller
 
         $totalEmployee = count(array_unique($arrayEmployee));
 
+        //Email
         $message = \Swift_Message::newInstance()
             ->setSubject('Suppression d\'un projet')
             ->setFrom('franck.moniez90@gmail.com')
@@ -207,6 +206,7 @@ class ProjectController extends Controller
                     'totalEmployee' => $totalEmployee
                 )),'text/html');
 
+        //Sending Email
         $this->get('mailer')->send($message);
 
         $em->remove($projectToDelete);
@@ -229,6 +229,7 @@ class ProjectController extends Controller
             throw $this->createNotFoundException();
         }
 
+        //Get All details and display last 10 by the knp_paginator Bundle
         $detailList = $this->get('knp_paginator')->paginate(
             $em->getRepository('AppBundle:Detail')->findBy(array('project' => $project->getId()), array('date' => 'desc')),
             $request->query->get('page', 1),
@@ -240,6 +241,7 @@ class ProjectController extends Controller
             throw $this->createNotFoundException();
         }
 
+        //For new detail
         $detail = new Detail();
         $detail->setProject($project);
 
@@ -267,6 +269,7 @@ class ProjectController extends Controller
             ));
         }
 
+        //Stat for the template
         $totalCost = 0;
         $arrayEmployee = array();
 
@@ -280,9 +283,10 @@ class ProjectController extends Controller
 
         $searchForm = $this->createFormBuilder()
             ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
-            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px', 'placeholder' => 'Rechercher...')))
             ->getForm();
 
+        //searchForm
         $searchForm->handleRequest($request);
 
         if($searchForm->isSubmitted() && $searchForm->isValid()){

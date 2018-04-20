@@ -809,7 +809,7 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
 }
 
 .ds .details {
-	width: 200px;
+	width: 300px;
 	float: left;
 }
 
@@ -2219,8 +2219,12 @@ label {
     background: #68dff0;
     color: #fff;
     padding: 10px 0;
+    position: fixed;
+    bottom:0;
+    left: 0;
+    right:0;
+    z-index: -100;
 }
-
 
 .go-top {
     margin-right: 1%;

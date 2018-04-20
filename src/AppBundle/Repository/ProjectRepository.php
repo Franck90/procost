@@ -1,4 +1,5 @@
 <?php
+//src/AppBundle/Repository/ProjectRepository.php
 
 namespace AppBundle\Repository;
 
@@ -10,10 +11,12 @@ namespace AppBundle\Repository;
  */
 class ProjectRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Custom search request in DQL language
     function search($word)
     {
         $query = $this->createQueryBuilder('u');
 
+        //Return results that contain the key word (in the name of the project)
         return $query->where($query->expr()->like('u.name', ':name'))
             ->setParameter('name', '%'.$word.'%')
             ->getQuery()->getResult();

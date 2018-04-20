@@ -1,11 +1,14 @@
 {# app/Resources/TwigBundle/views/Exception/error404.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <h1>Page not found</h1>
+{% block title %}
+    PROCOST - Erreur 404
+{% endblock %}
 
-    <p>
-        The requested page couldn't be located. Checkout for any URL
-        misspelling orreturn to the homepage.
-    </p>
+{% block body %}
+    <section class="wrapper">
+        <h1>Vous êtes perdu !</h1>
+
+        <h3>Retournez à la <a href="{{ path("dashboard") }}">page d'accueil</a> ;)</h3>
+    </section>
 {% endblock %}

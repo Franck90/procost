@@ -1,4 +1,5 @@
 <?php
+//src/AppBundle/Controller/JobController.php
 
 namespace AppBundle\Controller;
 
@@ -12,7 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 class JobController extends Controller
 {
     /**
@@ -22,6 +22,7 @@ class JobController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        //Get All jobs and display last 10 by the knp_paginator Bundle
         $jobs = $this->get('knp_paginator')->paginate(
 
             $em->getRepository('AppBundle:Job')->findAll(),
@@ -35,9 +36,10 @@ class JobController extends Controller
 
         $searchForm = $this->createFormBuilder()
             ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
-            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px', 'placeholder' => 'Rechercher...')))
             ->getForm();
 
+        //Search form
         $searchForm->handleRequest($request);
 
         if($searchForm->isSubmitted() && $searchForm->isValid()){
@@ -77,9 +79,10 @@ class JobController extends Controller
             return $this->redirectToRoute('job');
         }
 
+        //Search form
         $searchForm = $this->createFormBuilder()
             ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
-            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px', 'placeholder' => 'Rechercher...')))
             ->getForm();
 
         $searchForm->handleRequest($request);
@@ -128,9 +131,10 @@ class JobController extends Controller
             return $this->redirectToRoute('job');
         }
 
+        //Search form
         $searchForm = $this->createFormBuilder()
             ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
-            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px', 'placeholder' => 'Rechercher...')))
             ->getForm();
 
         $searchForm->handleRequest($request);
@@ -176,7 +180,7 @@ class JobController extends Controller
 
         } catch (ForeignKeyConstraintViolationException $e) {
 
-            $this->get('session')->getFlashBag()->add('error', "Le métier appartient à un employer, suppression impossible");
+            $this->get('session')->getFlashBag()->add('error', "Le métier appartient à un employé, suppression impossible");
             return $this->redirectToRoute('job');
         }
 

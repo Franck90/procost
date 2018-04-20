@@ -1,8 +1,10 @@
 <?php
+//src/AppBundle/Entity/Employee.php
 
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Employee
@@ -23,55 +25,83 @@ class Employee
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *  min = 2,
+     *  max = 25,
+     *  minMessage = "Le nom doit faire au moins {{ limit }} caractères",
+     *  maxMessage = "Le nom doit faire au plus {{ limit }} caractères"
+     * )
      * @ORM\Column(name="surname", type="string", length=255)
      */
     private $surname;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *  min = 2,
+     *  max = 25,
+     *  minMessage = "Le prénom doit faire au moins {{ limit }} caractères",
+     *  maxMessage = "Le prénom doit faire au plus {{ limit }} caractères"
+     * )
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Email(
+     *     message = "L'email '{{ value }}' n'est pas valide",
+     *     checkMX = true
+     * )
      * @ORM\Column(name="mail", type="string", length=255)
      */
     private $mail;
 
     /**
      * @var float
-     *
+     * @Assert\NotBlank()
+     * @Assert\Range(
+     *      min = 0,
+     *      minMessage = "Le coût doit être positif",
+     * )
      * @ORM\Column(name="cost", type="float")
      */
     private $cost;
 
     /**
      * @var \DateTime
-     *
+     * @Assert\NotBlank()
+     * @Assert\Date()
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
     /**
      * @var boolean
-     *
+     * @Assert\Type(
+     *     type="bool",
+     *     message="La valeur {{ value }} n'est pas un {{ type }}"
+     * )
      * @ORM\Column(name="active", type="boolean", options={"default":true})
      */
     private $active;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Url(
+     *    message = "l'url '{{ value }}' n'est pas valide",
+     * )
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
     private $url;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Job", inversedBy="employees")
+     * @Assert\NotBlank()
      * @ORM\JoinColumn(name="job_id", referencedColumnName="id")
      */
     private $job;
@@ -80,7 +110,6 @@ class Employee
      * @ORM\OneToMany(targetEntity="Detail", mappedBy="employee", cascade={"remove"})
      */
     private $detail;
-
 
     /**
      * Get id

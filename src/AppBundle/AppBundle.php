@@ -1,4 +1,5 @@
 <?php
+//src/AppBundle/AppBundle.php
 
 namespace AppBundle;
 

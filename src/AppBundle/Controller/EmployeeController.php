@@ -1,4 +1,5 @@
 <?php
+//src/AppBundle/Controller/EmployeeController.php
 
 namespace AppBundle\Controller;
 
@@ -13,7 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 
-
 class EmployeeController extends Controller
 {
     /**
@@ -23,6 +23,7 @@ class EmployeeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        //Get All employees and display last 10 by the knp_paginator Bundle
         $employees = $this->get('knp_paginator')->paginate(
 
             $em->getRepository('AppBundle:Employee')->findBy(array(), array('date' => 'desc')),
@@ -34,9 +35,10 @@ class EmployeeController extends Controller
             throw $this->createNotFoundException();
         }
 
+        //Search form
         $searchForm = $this->createFormBuilder()
             ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
-            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px', 'placeholder' => 'Rechercher...')))
             ->getForm();
 
         $searchForm->handleRequest($request);
@@ -80,9 +82,10 @@ class EmployeeController extends Controller
             return $this->redirectToRoute('employee');
         }
 
+        //Search form
         $searchForm = $this->createFormBuilder()
             ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
-            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px', 'placeholder' => 'Rechercher...')))
             ->getForm();
 
         $searchForm->handleRequest($request);
@@ -139,9 +142,10 @@ class EmployeeController extends Controller
             return $this->redirectToRoute('employee');
         }
 
+        //Search form
         $searchForm = $this->createFormBuilder()
             ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
-            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px', 'placeholder' => 'Rechercher...')))
             ->getForm();
 
         $searchForm->handleRequest($request);
@@ -223,6 +227,7 @@ class EmployeeController extends Controller
             throw $this->createNotFoundException();
         }
 
+        //Get All details and display last 10 by the knp_paginator Bundle
         $detailList = $this->get('knp_paginator')->paginate(
 
             $em->getRepository('AppBundle:Detail')->findBy(array('employee' => $employee->getId()), array('date' => 'desc')),
@@ -261,9 +266,10 @@ class EmployeeController extends Controller
             ));
         }
 
+        //Search form
         $searchForm = $this->createFormBuilder()
             ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
-            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px', 'placeholder' => 'Rechercher...')))
             ->getForm();
 
         $searchForm->handleRequest($request);
@@ -393,9 +399,10 @@ class EmployeeController extends Controller
             ));
         }
 
+        //Search form
         $searchForm = $this->createFormBuilder()
             ->add('search', SubmitType::class, array('label' => 'Rechercher', 'attr' => array('style' => 'float: right')))
-            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px')))
+            ->add('word', TextType::class, array('label' => false, 'attr' => array('style' => 'float: right; width : 150px ; margin-right : 10px', 'placeholder' => 'Rechercher...')))
             ->getForm();
 
         $searchForm->handleRequest($request);

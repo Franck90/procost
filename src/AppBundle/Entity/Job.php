@@ -1,11 +1,11 @@
 <?php
+//src/AppBundle/Entity/Job.php
 
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
-
 
 /**
  * Job
@@ -27,6 +27,12 @@ class Job
     /**
      * @var string
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *  min = 2,
+     *  max = 25,
+     *  minMessage = "Le nom du métier doit faire au moins {{ limit }} caractères",
+     *  maxMessage = "Le nom du métier doit faire au plus {{ limit }} caractères"
+     * )
      * @ORM\Column(name="job_name", type="string", length=255, unique=true)
      */
     private $name;

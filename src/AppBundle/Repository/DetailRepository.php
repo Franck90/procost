@@ -1,4 +1,5 @@
 <?php
+//src/AppBundle/Repository/DetailRepository.php
 
 namespace AppBundle\Repository;
 
